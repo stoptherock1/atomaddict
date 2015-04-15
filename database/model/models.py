@@ -42,7 +42,8 @@ class Tag(db.Model):
     name = Column(String(30), unique=True)
 
     # One to Many Tag -> Websites
-    websites = relationship('Website', backref='tag')
+    websites = relationship('Website', backref='tag',
+                            cascade="save-update, merge, delete")
 
     def __repr__(self):
         return "<Tag (name = '%s')>" % self.name
@@ -58,7 +59,8 @@ class Website(db.Model):
     tag_id = Column(Integer, ForeignKey('tags.id'))
 
     # One to Many: website -> articles
-    articles = relationship('Article', backref='website')
+    articles = relationship('Article', backref='website',
+                            cascade="save-update, merge, delete")
 
     def __repr__(self):
         return "<Website (name = '%s', uri = '%s', tag = '%s')>" % \
