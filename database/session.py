@@ -1,7 +1,6 @@
 from database.model import db
 from sqlalchemy.orm import sessionmaker
-from database.model.models import User, Tag, Article, Website
-import types
+from database.model.models import User, Tag, Website, Article
 from datetime import datetime
 
 Session = sessionmaker(bind=db.engine)
@@ -9,6 +8,8 @@ Session = sessionmaker(bind=db.engine)
 
 class DatabaseSessionError(Exception):
     '''Base class of exceptions for database session.
+
+    To handle it you can write like this:
 
     try:
         Create.create_user(...)
@@ -38,113 +39,30 @@ class FunctionParameterError(DatabaseSessionError):
                                                      message)
 
 
-class Create():
-    @staticmethod
-    def users(list_of_users):
-        '''Create users.
+class Put():
+    def __init__(self):
+        self.session = Session()
 
-        users([(...),(...)]
-        They must be passed as a list of tuples, which should
-        look like this one:
-        (email, password, nickname)
-        '''
-        if isinstance(list_of_users, types.ListType):
-            for user in list_of_users:
-                if isinstance(user, types.TupleType):
-                    if len(user) == 2:
-                        Create.user(email=user[0], password=user[1])
-                    elif len(user) == 3:
-                        Create.user(email=user[0], password=user[1],
-                                    nickname=user[2])
-
-    @staticmethod
-    def user(email, password, nickname=None):
-        '''Create user.
-
-        Email and password are necessary.
-        '''
-        if email is None or "":
-            raise FunctionParameterError("Email is required")
-        if password is None or "":
-            raise FunctionParameterError("Password is required")
-        session = Session()
-        user_exist = session.query(User).filter_by(email=email).all()
-        if not user_exist:
-            if nickname is None or "":
-                nickname = email
-            user = User(email=email, nickname=nickname, password=password)
-            session.add(user)
-            session.commit()
-            print "User added with success"
-        else:
-            session.rollback()
-            session.close()
-            raise AlreadyExists("User")
-        session.close()
-
-    @staticmethod
-    def websites():
-        pass
-
-    @staticmethod
-    def website(uri, name):
+    def website(self, uri, name):
         '''Create website.
 
         Name and uri are necessary.
+        Uri must be unique.
         '''
         if uri is None or "":
             raise FunctionParameterError("Uri is necessary")
         if name is None or "":
             raise FunctionParameterError("Name is necessary")
-        session = Session()
-        website_exists = session.query(Website).filter_by(uri=uri).all()
+        website_exists = self.session.query(Website).filter_by(uri=uri).all()
         if not website_exists:
-            session.add(Website(uri=uri, name=name))
-            session.commit()
+            self.session.add(Website(uri=uri, name=name))
+            self.session.commit()
             print "Website added with success"
         else:
-            session.rollback()
-            session.close()
+            self.session.rollback()
             raise AlreadyExists("Websie")
-        session.close()
 
-    @staticmethod
-    def tags(list_of_tags):
-        '''Create tags.
-
-        They must be passed as a list, which should
-        contains their names.
-        '''
-        if isinstance(list_of_tags, types.ListType):
-            for tag in list_of_tags:
-                Create.tag(name=str(tag))
-
-    @staticmethod
-    def tag(name):
-        '''Create tag.
-
-        Name is necessary and it must be unique
-        '''
-        if name is None or "":
-            raise FunctionParameterError("Name is necessary")
-        session = Session()
-        tag_exists = session.query(Tag).filter_by(name=name).all()
-        if not tag_exists:
-            session.add(Tag(name=name))
-            session.commit()
-            print "Tag added with success"
-        else:
-            session.rollback()
-            session.close()
-            raise AlreadyExists("Tag")
-        session.close()
-
-    @staticmethod
-    def articles():
-        pass
-
-    @staticmethod
-    def article(head, content, time=None, picture=None):
+    def article(self, head, content, time=None, picture=None):
         '''Create article.
 
         Head and content are necessary.
@@ -153,217 +71,173 @@ class Create():
             raise FunctionParameterError("Head is necessary")
         if content is None or "":
             raise FunctionParameterError("Content is necessary")
-        session = Session()
         if time is None:
             time = datetime.utcnow()
-        session.add(Article(head=head, content=content, time=time,
-                            picture=picture))
-        session.commit()
-        session.close()
+        self.session.add(Article(head=head, content=content, time=time,
+                                 picture=picture))
+        self.session.commit()
 
+    def tag(self, name):
+        '''Create tag.
 
-class Delete():
-    @staticmethod
-    def user(email):
-        session = Session()
-        user = session.query(User).filter_by(email=email).first()
-        session.delete(user)
-        session.commit()
-        session.close()
+        Name is necessary and it must be unique
+        '''
+        if name is None or "":
+            raise FunctionParameterError("Name is necessary")
+        tag_exists = self.session.query(Tag).filter_by(name=name).all()
+        if not tag_exists:
+            self.session.add(Tag(name=name))
+            self.session.commit()
+            print "Tag added with success"
+        else:
+            self.session.rollback()
+            raise AlreadyExists("Tag")
 
-    @staticmethod
-    def tag(name):
-        session = Session()
-        tag = session.query(Tag).filter_by(name=name).first()
-        session.delete(tag)
-        session.commit()
-        session.close()
+    def user(self, email, password, nickname=None):
+        '''Create user.
 
-    @staticmethod
-    def website(uri):
-        session = Session()
-        website = session.query(Website).filter_by(uri=uri).first()
-        session.delete(website)
-        session.commit()
-        session.close()
+        Email and password are necessary.
+        Email must be unique.
+        '''
+        if email is None or "":
+            raise FunctionParameterError("Email is required")
+        if password is None or "":
+            raise FunctionParameterError("Password is required")
+        user_exist = self.session.query(User).filter_by(email=email).all()
+        if not user_exist:
+            if nickname is '' or "" or None:
+                nickname = email
+            user = User(email=email, nickname=nickname,
+                        password=password)
+            self.session.add(user)
+            self.session.commit()
+            print "User added with success"
+        else:
+            self.session.rollback()
+            raise AlreadyExists("User")
 
-    @staticmethod
-    def artticle(id_):
-        session = Session()
-        article = session.query(Article).filter_by(id=id_).first()
-        session.delete(article)
-        session.commit()
-        session.close()
-
-    @staticmethod
-    def all_tags():
-        '''delete all tags'''
-        session = Session()
-        tags = session.query(Tag).all()
-        for t in tags:
-            session.delete(t)
-        session.commit()
-        session.close()
-
-    @staticmethod
-    def all_websties():
-        '''delete all websites'''
-        session = Session()
-        websites = session.query(Website).all()
-        for w in websites:
-            session.delete(w)
-        session.commit()
-        session.close()
-
-    @staticmethod
-    def all_articles():
-        '''Delete all articles'''
-        session = Session()
-        articles = session.query(Article).all()
-        for a in articles:
-            session.delete(a)
-        session.commit()
-        session.close()
-
-    @staticmethod
-    def all_users():
-        '''Delete all users.'''
-        session = Session()
-        users = session.query(User).all()
-        if users:
-            for u in users:
-                session.delete(u)
-                session.commit()
-        session.close()
+    def close_session(self):
+        self.session.close()
 
 
 class Get():
-    @staticmethod
-    def all_users():
+    def __init__(self):
+        self.session = Session()
+
+    def close_session(self):
+        self.session.close()
+
+    def all_users(self):
         '''Get all users as a list.'''
-        session = Session()
-        users = session.query(User).all()
-        session.close()
+        users = self.session.query(User).all()
         return users
 
-    @staticmethod
-    def user(email):
+    def user(self, email):
         '''Get user with given email'''
-        session = Session()
-        user = session.query(User).filter_by(email=email).first()
-        session.close()
+        user = self.session.query(User).filter_by(email=email).first()
         return user
 
-    @staticmethod
-    def all_websites():
+    def all_websites(self):
         '''Get all websites as a list.'''
-        session = Session()
-        websites = session.query(Website).all()
-        session.close()
+        websites = self.session.query(Website).all()
         return websites
 
-    @staticmethod
-    def website(uri):
+    def website(self, uri):
         '''Get website with given uri'''
-        session = Session()
-        website = session.query(Website).filter_by(uri=uri).first()
-        session.close()
+        website = self.session.query(Website).filter_by(uri=uri).first()
         return website
 
-    @staticmethod
-    def all_tags():
+    def all_tags(self):
         '''Get all tags as a list.'''
-        session = Session()
-        tags = session.query(Tag).all()
-        session.close()
+        tags = self.session.query(Tag).all()
         return tags
 
-    @staticmethod
-    def tag(name):
+    def tag(self, name):
         '''Get tag with given name'''
-        session = Session()
-        tag = session.query(Tag).filter_by(name=name).first()
-        session.close()
+        tag = self.session.query(Tag).filter_by(name=name).first()
         return tag
 
-    @staticmethod
-    def all_articles():
+    def all_articles(self):
         '''Get all articles as a list.'''
-        session = Session()
-        articles = session.query(Article).all()
-        session.close()
+        articles = self.session.query(Article).all()
         return articles
 
-    @staticmethod
-    def article(id_):
+    def article(self, id_):
         '''Get user with given email'''
-        session = Session()
-        article = session.query(Article).filter_by(id=id_).first()
-        session.close()
+        article = self.session.query(Article).filter_by(id=id_).first()
         return article
 
-    @staticmethod
-    def users_tags(email):
-        '''Get user's tags as a list.'''
-        session = Session()
-        user = session.query(User).filter_by(email=email).first()
-        tags = user.tags.all()
-        session.close()
-        return tags
 
-    @staticmethod
-    def users_websites(email):
-        '''Get user's websites as a list'''
-        session = Session()
-        user = session.query(User).filter_by(email=email).first()
-        websites = []
-        tags = user.tags.all()
-        for tag in tags:
-            websites.append(tag.websites.all())
-        session.close()
-        return websites
+class Delete():
+    def __init__(self):
+        self.session = Session()
 
-    @staticmethod
-    def tags_websites(name):
-        '''Get tag's websites as a list'''
-        session = Session()
-        tag = session.query(Tag).filter_by(name=name).first()
-        websites = tag.websites.all()
-        session.close()
-        return websites
+    def close_session(self):
+        self.session.close()
+
+    def website(self, uri):
+        website = self.session.query(Website).filter_by(uri=uri).first()
+        self.session.delete(website)
+        self.session.commit()
+
+    def tag(self, name):
+        tag = self.session.query(Tag).filter_by(name=name).first()
+        self.session.delete(tag)
+        self.session.commit()
+
+    def artticle(self, id_):
+        article = self.session.query(Article).filter_by(id=id_).first()
+        self.session.delete(article)
+        self.session.commit()
+
+    def user(self, email):
+        user = self.session.query(User).filter_by(email=email).first()
+        self.session.delete(user)
+        self.session.commit()
+
+    def all_tags(self):
+        '''delete all tags'''
+        tags = self.session.query(Tag).all()
+        for t in tags:
+            self.session.delete(t)
+        self.session.commit()
+
+    def all_websties(self):
+        '''delete all websites'''
+        websites = self.session.query(Website).all()
+        for w in websites:
+            self.session.delete(w)
+        self.session.commit()
+
+    def all_articles(self):
+        '''Delete all articles'''
+        articles = self.session.query(Article).all()
+        for a in articles:
+            self.session.delete(a)
+        self.session.commit()
+
+    def all_users(self):
+        '''Delete all users.'''
+        users = self.session.query(User).all()
+        if users:
+            for u in users:
+                self.session.delete(u)
+                self.session.commit()
 
 
 class Add():
-    @staticmethod
-    def tag_to_user(email, tagname):
-        '''Add tag to user'''
-        session = Session()
-        user_exists = session.query(User).filter_by(email=email).first()
-        tag_exists = session.query(Tag).filter_by(name=tagname).first()
-        if tag_exists and user_exists:
-            user_exists.tags.append(tag_exists)
-        session.commit()
-        session.close()
+    def __init__(self):
+        self.session = Session()
 
-    @staticmethod
-    def website_to_tag(tagname, website_uri):
+    def close_session(self):
+        self.session.close()
+
+    def website_to_tag(self, tagname, website_uri):
         '''Add website to tag'''
-        session = Session()
-        tag_exists = session.query(Tag).filter_by(name=tagname).first()
-        website_exists = session.query(Website).\
+        tag_exists = self.session.query(Tag).filter_by(name=tagname).first()
+        website_exists = self.session.query(Website).\
             filter_by(uri=website_uri).first()
         if tag_exists and website_exists:
             tag_exists.websites.append(website_exists)
-        session.commit()
-        session.close()
-
-    @staticmethod
-    def article_to_website(website_uri, article_id):
-        '''Add article to website'''
-        session = Session()
-        website_exists = session.query(Website).filter_by(uri=website_uri).\
-            first()
-        article_exists = session.query(Article).filter_by(id=article_id).\
-            first()
-        if website_exists and article_exists:
-            website_exists.articles.append(article_exists)
+            print('website added to tag')
+        self.session.commit()
