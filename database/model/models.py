@@ -63,8 +63,8 @@ class Website(db.Model):
                             cascade="save-update, merge, delete")
 
     def __repr__(self):
-        return "<Website (name = '%s', uri = '%s', tag = '%s')>" % \
-            (self.name, self.uri, self.tag_id.name)
+        return "<Website (name = '%s', uri = '%s')>" % \
+            (self.name, self.uri)
 
 
 class Article(db.Model):
@@ -79,5 +79,5 @@ class Article(db.Model):
     website_id = Column(Integer, ForeignKey('websites.id'))
 
     def __repr__(self):
-        return "<Article (head = '%s', content = '%s', date = '%s', website = '%s')>" % \
-            (self.head, self.content, self.time, self.website_id.name)
+        return "<Article (head = '%s', content = '%s', date = '%s')>" % \
+            (self.head, self.content, self.time)
