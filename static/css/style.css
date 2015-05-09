@@ -1,0 +1,12 @@
+ul.tags {
+    margin-top: 5px;
+}
+
+.uk-panel.tile h2,  .uk-panel.tile p {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.uk-panel.tile .uk-panel-teaser {
+    margin-bottom: 5px;
+}
