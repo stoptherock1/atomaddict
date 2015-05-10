@@ -9,7 +9,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
-    # TODO If user is logged in render index.html. Ladning page otherwise.
+    # TODO If user is logged in render index.html. Landing page otherwise.
     return render_template('index.html')
 
 
@@ -29,6 +29,12 @@ def sign_in():
 def sign_out():
     # TODO Acutall signing out
     return redirect(url_for('index'))
+
+
+@app.route('/settings')
+def settings():
+    # TODO Save user's settings
+    return 'Settings updated'
 
 
 if __name__ == '__main__':
