@@ -12,7 +12,7 @@ class DatabaseSessionError(Exception):
     To handle it you can write like this:
 
     try:
-        Create.create_user(...)
+        put.user(...)
     exception DatabaseSessionError as error:
         print error
     '''
