@@ -55,11 +55,10 @@ if __name__ == "__main__":
     put.tag(name='sport')
     put.tag(name='smieci')
 
-    a1 = put.article(head='super wygrana', content='super wygrana druzyny')
-    a2 = put.article(head='paris hilton', content='paris hilton na pokazie')
-    a3 = put.article(head='paris asdfhilton', content='asdfparis hilton na ' +
-                     'pokazie')
-    a4 = put.article(head='pozar', content='wielkipozar!')
+    a1 = put.article(head='naglowek 1', uri='www.wasdfasdfaf.com')
+    a2 = put.article(head='naglowek 2', uri='adsfasdf.pl')
+    a3 = put.article(head='naglowek 3', uri='www.qwret.pl ')
+    a4 = put.article(head='naglowek 4', uri='www.pl.pl')
     put.close_session()
 
     # add some things
@@ -72,11 +71,11 @@ if __name__ == "__main__":
 
     add.tag_to_user(email='Adam@gmail', tagname='informacje')
     add.tag_to_user(email='Bob@gmail', tagname='informacje')
-    add.article_to_website(website_uri='wp.pl', article_id=a4)
-    add.article_to_website(website_uri='google.com', article_id=a4)
-    add.article_to_website(website_uri='premierleague.com', article_id=a1)
-    add.article_to_website(website_uri='pudelek.pl', article_id=a2)
-    add.article_to_website(website_uri='pudelek.pl', article_id=a3)
+    add.article_to_website(website_uri='wp.pl', article_uri=a4)
+    add.article_to_website(website_uri='google.com', article_uri=a4)
+    add.article_to_website(website_uri='google.com', article_uri=a1)
+    add.article_to_website(website_uri='pudelek.pl', article_uri=a2)
+    add.article_to_website(website_uri='pudelek.pl', article_uri=a3)
     add.close_session()
 
     # get some things
@@ -108,6 +107,14 @@ if __name__ == "__main__":
                 print a
 
     get.close_session()
+ 
+#     delete = Delete()
+#     delete.all_users()
+#     delete.all_tags()
+#     delete.all_websties()
+#     delete.all_tags()
+#     delete.all_articles()
+#     delete.close_session()
  
  
  # wypis z konsoli   
