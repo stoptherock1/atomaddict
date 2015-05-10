@@ -3,11 +3,7 @@ from database.session import Delete, Get, Put, Add
 
 if __name__ == "__main__":
 
-    
-    
-    
-    
-    
+
     # delete all
 
     delete = Delete()
@@ -115,7 +111,7 @@ if __name__ == "__main__":
 #     delete.all_tags()
 #     delete.all_articles()
 #     delete.close_session()
- 
+  
  
  # wypis z konsoli   
 #===============================================================================
