@@ -17,7 +17,7 @@
             <ul class="uk-navbar-nav">
                 <li><a href="#modal-subscribe" title="Add feed" data-uk-modal><i class="uk-icon-rss"></i></a></li>
                 <li><a href="#" title="Refresh feeds"><i class="uk-icon-refresh"></i></a></li>
-                <li><a href="#" title="Mark as read"><i class="uk-icon-check-square-o"></i></a></li>
+                <li><a id="mark-as-read" href="#" title="Mark as read"><i class="uk-icon-check-square-o"></i></a></li>
             </ul>
             <div class="uk-navbar-flip">
                 <ul class="uk-navbar-nav uk-hidden-small">
@@ -48,7 +48,10 @@
             </nav>
         </div>
 
-        <div data-uk-grid="{controls: 'ul.tags', gutter: 10}">
+        <div id="news-list" data-uk-grid="{controls: 'ul.tags', gutter: 10}">
+            <div id="no-news" class="uk-panel uk-panel-box uk-panel-box-secondary uk-width-medium-1-4 uk-container-center uk-text-center uk-hidden">
+                <p>Current category has no unread items</p>
+            </div>
             <div data-uk-filter="sport">
                 <div class="uk-panel uk-panel-box tile">
                     <div class="uk-panel-teaser">
