@@ -65,22 +65,29 @@ class Put():
             raise AlreadyExists("Websie")
             return None
 
-    def article(self, head, content, time=None, picture=None):
+    def article(self, head, uri, time=None, picture=None):
         '''Create article.
 
-        Head and content are necessary.
+        Head and uri are necessary.
         '''
         if not head or head is "":
             raise FunctionParameterError("Head is necessary")
-        if not content or content is "":
+        if not uri or uri is "":
             raise FunctionParameterError("Content is necessary")
-        if not time:
-            time = datetime.utcnow()
-        article = Article(head=head, content=content, time=time,
-                          picture=picture)
-        self.session.add(article)
-        self.session.commit()
-        return article.id
+        uri_exist = self.session.query(Article).filter_by(uri=uri).all()
+        if not uri_exist:
+            if not time:
+                time = datetime.utcnow()
+            article = Article(head=head, uri=uri, time=time,
+                              picture=picture)
+            self.session.add(article)
+            self.session.commit()
+            print "Article added with succes"
+            return article.uri
+        else:
+            self.session.rollback()
+            raise AlreadyExists("Article")
+            return None
 
     def tag(self, name):
         '''Create tag.
@@ -172,9 +179,9 @@ class Get():
         articles = self.session.query(Article).all()
         return articles
 
-    def article(self, id_):
+    def article(self, uri):
         '''Get user with given email'''
-        article = self.session.query(Article).filter_by(id=id_).first()
+        article = self.session.query(Article).filter_by(uri=uri).first()
         return article
 
 
@@ -195,8 +202,8 @@ class Delete():
         self.session.delete(tag)
         self.session.commit()
 
-    def artticle(self, id_):
-        article = self.session.query(Article).filter_by(id=id_).first()
+    def artticle(self, uri):
+        article = self.session.query(Article).filter_by(uri=uri).first()
         self.session.delete(article)
         self.session.commit()
 
@@ -261,11 +268,11 @@ class Add():
             print 'tag added to user'
         self.session.commit()
 
-    def article_to_website(self, website_uri, article_id):
+    def article_to_website(self, website_uri, article_uri):
         '''Add article to website'''
         website_exists = self.session.query(Website).filter_by(uri=website_uri).\
             first()
-        article_exists = self.session.query(Article).filter_by(id=article_id).\
+        article_exists = self.session.query(Article).filter_by(uri=article_uri).\
             first()
         if website_exists and article_exists:
             website_exists.articles.append(article_exists)
