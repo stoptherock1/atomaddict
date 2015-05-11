@@ -52,7 +52,7 @@ class Tag(db.Model):
 class Website(db.Model):
     __tablename__ = 'websites'
     id = Column(Integer, primary_key=True)
-    uri = Column(Text, nullable=False)
+    url = Column(Text)
     name = Column(String(120))
 
     # Many to One: websites -> tag
@@ -63,15 +63,15 @@ class Website(db.Model):
                             cascade="save-update, merge, delete")
 
     def __repr__(self):
-        return "<Website (name = '%s', uri = '%s')>" % \
-            (self.name, self.uri)
+        return "<Website (name = '%s', url = '%s')>" % \
+            (self.name, self.url)
 
 
 class Article(db.Model):
     __tablename__ = 'articles'
     id = Column(Integer, primary_key=True)
     head = Column(Text())
-    uri = Column(Text())
+    url = Column(Text())
     picture = Column(Text())
     time = Column(DateTime)
 
@@ -79,5 +79,5 @@ class Article(db.Model):
     website_id = Column(Integer, ForeignKey('websites.id'))
 
     def __repr__(self):
-        return "<Article (head = '%s', uri = '%s', date = '%s')>" % \
-            (self.head, self.uri, self.time)
+        return "<Article (head = '%s', url = '%s', date = '%s')>" % \
+            (self.head, self.url, self.time)

@@ -3,7 +3,7 @@ from celery import Celery
 import feedparser
 
 #===============================================================================
-# ps: rabbitmq-server -detached 
+# ps: rabbitmq-server -detached
 # ps: celery -A tasks.celery worker --loglevel=info     // ctrl+c
 #
 # 3. rabbitmqctl stop
@@ -36,7 +36,7 @@ celery = make_celery(flask_app)
 celery.conf.update(flask_app.config)
 
 
-############ tasks
+# tasks
 @celery.task
 def downloadFeeds(pageUrl):
     data = feedparser.parse(pageUrl)
