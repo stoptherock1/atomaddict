@@ -6,11 +6,14 @@ $(function() {
         var category = $('ul.tags li.uk-active').data('uk-filter'),
             childSelector = '[data-uk-filter="' + category + '"]:visible';
 
+        /*
+         * Couses nasty bug with displaying tiles after marking as read
         if (category && $newsWrapper.children(childSelector).length === 0) {
-            $('#no-news').removeClass('uk-hidden').attr('style', '');
+            $('#no-news').attr('style', '').removeClass('uk-hidden');
         } else {
             $('#no-news').addClass('uk-hidden');
         }
+        */
     }
 
     function updateCategory(text) {
