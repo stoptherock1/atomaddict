@@ -1,165 +1,126 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>Atom Addict</title>
-        <meta name="viewport" content="width=device-width,maximum-scale=1, user-scalable=no">
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/uikit.css') }}" />
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
-        <script src="{{ url_for('static', filename='js/jquery.js') }}"></script>
-        <script src="{{ url_for('static', filename='js/uikit.js') }}"></script>
-        <script src="{{ url_for('static', filename='js/components/grid.js') }}"></script>
-        <script src="{{ url_for('static', filename='js/atomaddict.js') }}"></script>
-    </head>
-    <body>
-        <nav class="uk-navbar">
-            <a href="#hamburger" class="uk-navbar-toggle uk-visible-small" data-uk-offcanvas></a>
-            <a href="#" class="uk-navbar-brand">AtomAddict</a>
-            <ul class="uk-navbar-nav">
-                <li><a href="#modal-subscribe" title="Add feed" data-uk-modal><i class="uk-icon-rss"></i></a></li>
-                <li><a href="#" title="Refresh feeds"><i class="uk-icon-refresh"></i></a></li>
-                <li><a id="mark-as-read" href="#" title="Mark as read"><i class="uk-icon-check-square-o"></i></a></li>
-            </ul>
-            <div class="uk-navbar-flip">
-                <ul class="uk-navbar-nav uk-hidden-small">
-                    <li><a href="#modal-settings" title="Settings" data-uk-modal><i class="uk-icon-cog"></i></a></li>
-                    <li><a href="{{ url_for('sign_out') }}" title="Sign out"><i class="uk-icon-sign-in"></i></a></li>
-                </ul>
-            </div>
-            <div id="tagMarker" class="uk-navbar-content uk-navbar-center uk-hidden-small">All</div>
-        </nav>
-        <ul class="uk-subnav uk-subnav-pill uk-flex-center tags">
-            <li data-uk-filter="" class="uk-active"><a href="#">All</a></li>
-            <li data-uk-filter="sport"><a href="#">Sport</a></li>
-            <li data-uk-filter="technologies"><a href="#">Technologies</a></li>
-            <li data-uk-filter="music"><a href="#">Music</a></li>
+<!-- extends from base layout -->
+{% extends "base.html" %}
+
+
+{% block uk_navbar %}
+    <ul class="uk-navbar-nav">
+        <li><a href="#modal-subscribe" title="Add feed" data-uk-modal><i class="uk-icon-rss"></i></a></li>
+        <li><a href="#" title="Refresh feeds"><i class="uk-icon-refresh"></i></a></li>
+        <li><a id="mark-as-read" href="#" title="Mark as read"><i class="uk-icon-check-square-o"></i></a></li>
+    </ul>
+    <div class="uk-navbar-flip">
+        <ul class="uk-navbar-nav uk-hidden-small">
+            <li><a href="#modal-settings" title="Settings" data-uk-modal><i class="uk-icon-cog"></i></a></li>
+            <li><a href="{{ url_for('sign_out') }}" title="Sign out"><i class="uk-icon-sign-in"></i></a></li>
         </ul>
-        <hr>
+    </div>
+    <div id="tagMarker" class="uk-navbar-content uk-navbar-center uk-hidden-small">All</div>
+{% endblock %}
+{% block uk_subnav %}
+    <ul class="uk-subnav uk-subnav-pill uk-flex-center tags">
+        <li data-uk-filter="" class="uk-active"><a href="#">All</a></li>
+		{% for tag in usertags %}
+			<li data-uk-filter={{tag.name}}><a href="#">{{tag.name}}</a></li>
+		{% endfor %}
+    </ul>
+	<hr>
+{% endblock %}
 
-        <div id="hamburger" class="uk-offcanvas">
-            <nav class="uk-offcanvas-bar">
-                <ul class="uk-nav uk-nav-offcanvas">
-                    <li><a href="#modal-subscribe" title="Subscribe" data-uk-modal><i class="uk-icon-rss"></i> Subscribe</a></li>
-                    <li><a href="#" title="Refresh feeds"><i class="uk-icon-refresh"></i> Refresh feeds</a></li>
-                    <li><a href="#" title="Mark as read"><i class="uk-icon-check-square-o"> Mark as read</i></a></li>
-                    <li class="uk-nav-divider"></li>
-                    <li><a href="#modal-settings" title="Settings" data-uk-modal><i class="uk-icon-cog"></i> Settings</a></li>
-                    <li><a href="{{ url_for('sign_out') }}" title="Sign out"><i class="uk-icon-sign-in"></i> Sign out</a></li>
-                </ul>
-            </nav>
+{% block hamburger %}
+	<div id="hamburger" class="uk-offcanvas">
+	    <nav class="uk-offcanvas-bar">
+	        <ul class="uk-nav uk-nav-offcanvas">
+	            <li><a href="#modal-subscribe" title="Subscribe" data-uk-modal><i class="uk-icon-rss"></i> Subscribe</a></li>
+	            <li><a href="#" title="Refresh feeds"><i class="uk-icon-refresh"></i> Refresh feeds</a></li>
+	            <li><a href="#" title="Mark as read"><i class="uk-icon-check-square-o"> Mark as read</i></a></li>
+	            <li class="uk-nav-divider"></li>
+	            <li><a href="#modal-settings" title="Settings" data-uk-modal><i class="uk-icon-cog"></i> Settings</a></li>
+	            <li><a href="{{ url_for('sign_out') }}" title="Sign out"><i class="uk-icon-sign-in"></i> Sign out</a></li>
+	        </ul>
+	    </nav>
+	</div>
+{% endblock %}
+
+{% block articles %}
+    <div id="news-list" data-uk-grid="{controls: 'ul.tags', gutter: 10}">
+        <div id="no-news" class="uk-panel uk-panel-box uk-panel-box-secondary uk-width-medium-1-4 uk-container-center uk-text-center uk-hidden">
+            <p>Current category has no unread items</p>
         </div>
+		{% for (article, tag) in articles_and_tags %}
+			<div data-uk-filter={{tag.name}}>
+				<div class="uk-panel uk-panel-box tile">
+					<div class="uk-panel-teaser">
+						{% if article.picture%}
+						<img src={{article.picture}} alt="">
+						{% endif %}
+					</div>
+					<article class="uk-article">
+						<h2>{{article.head}}</h2>
+						<div class="uk-article-meta uk-clearfix">
+                            <span><a href={{article.uri}}>link</a></span>
+                            <time class="uk-float-right" datetime={{article.time}}>{{article.time}}</time>
+						</div>
+                        <p>Some meme</p>
+					</article>
+				</div>
+			</div>
+		{% endfor %}
+	</div>	
+{% endblock %}
 
-        <div id="news-list" data-uk-grid="{controls: 'ul.tags', gutter: 10}">
-            <div id="no-news" class="uk-panel uk-panel-box uk-panel-box-secondary uk-width-medium-1-4 uk-container-center uk-text-center uk-hidden">
-                <p>Current category has no unread items</p>
-            </div>
-            <div data-uk-filter="sport">
-                <div class="uk-panel uk-panel-box tile">
-                    <div class="uk-panel-teaser">
-                        <img src="http://www.placehold.it/350x150" alt="">
+{% block modal %}
+    <section id="modal-settings" class="uk-modal">
+        <div class="uk-modal-dialog">
+            <div class="uk-modal-header"><h2>Settings</h2></div>
+            <form class="uk-form uk-form-horizontal" action="{{ url_for('settings') }}" method="post">
+                <div class="uk-form-row">
+                    <label class="uk-form-label" for="settings-language">Language</label>
+                    <div class="uk-form-controls">
+                        <select id="settings-language">
+                            <option value="en">English</option>
+                            <option value="pl">Polski</option>
+                        </select>
                     </div>
-                    <article class="uk-article" style="width-max=350px";>
-                        <h2>Some sport article</h2>
-                        <div class="uk-article-meta uk-clearfix">
-                            <span>Some website</span>
-                            <time class="uk-float-right" datetime="2015-05-15">May 15, 2015</time>
-                        </div>
-                        <p>Very important sport event took place in Wrocław</p>
-                    </article>
                 </div>
-            </div>
-            <div data-uk-filter="sport">
-                <div class="uk-panel uk-panel-box">
-                    <div class="uk-panel-teaser">
-                        <img src="http://www.placehold.it/370x200" alt="">
+                <div class="uk-form-row">
+                    <span class="uk-form-label">Tiles size</span>
+                    <div class="uk-form-controls uk-forms-controls-text">
+                        <label>
+                            <input type="radio" name="settings-size" value="small"></input>
+                            Small
+                        </label>
+                        <label>
+                            <input type="radio" name="settings-size" value="regular" checked></input>
+                            Regular
+                        </label>
+                        <label>
+                            <input type="radio" name="settings-size" value="big"></input>
+                            Big
+                        </label>
+                        <label>
+                            <input type="radio" name="settings-size" value="mixied"></input>
+                            Mixed
+                        </label>
                     </div>
-                    <div>Another sport article</div>
                 </div>
-            </div>
-            <div data-uk-filter="music">
-                <div class="uk-panel uk-panel-box">
-                    <div class="uk-panel-teaser">
-                        <img src="http://www.placehold.it/350x170" alt="">
-                    </div>
-                    <div>Music article</div>
-                </div>
-            </div>
-            <div data-uk-filter="sport">
-                <div class="uk-panel uk-panel-box">
-                    <div class="uk-panel-teaser">
-                        <img src="http://www.placehold.it/200x120" alt="">
-                    </div>
-                    <div>Yet another sport</div>
-                </div>
-            </div>
-            <div data-uk-filter="technologies">
-                <div class="uk-panel uk-panel-box">
-                    <div class="uk-panel-teaser">
-                        <img src="http://www.placehold.it/350x150" alt="">
-                    </div>
-                    <div>Technologies article</div>
-                </div>
-            </div>
-            <div data-uk-filter="music">
-                <div class="uk-panel uk-panel-box">
-                    <div class="uk-panel-teaser">
-                        <img src="http://www.placehold.it/250x100" alt="">
-                    </div>
-                    <div>Another music article</div>
-                </div>
+            </form>
+            <div class="uk-modal-footer uk-text-right">
+                <button type="button" class="uk-button uk-modal-close">Cancel</button>
+                <button type="button" class="uk-button uk-modal-close uk-button-primary">Save</button>
             </div>
         </div>
+    </section>
 
-        <section id="modal-settings" class="uk-modal">
-            <div class="uk-modal-dialog">
-                <div class="uk-modal-header"><h2>Settings</h2></div>
-                <form class="uk-form uk-form-horizontal" action="{{ url_for('settings') }}" method="post">
-                    <div class="uk-form-row">
-                        <label class="uk-form-label" for="settings-language">Language</label>
-                        <div class="uk-form-controls">
-                            <select id="settings-language">
-                                <option value="en">English</option>
-                                <option value="pl">Polski</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="uk-form-row">
-                        <span class="uk-form-label">Tiles size</span>
-                        <div class="uk-form-controls uk-forms-controls-text">
-                            <label>
-                                <input type="radio" name="settings-size" value="small"></input>
-                                Small
-                            </label>
-                            <label>
-                                <input type="radio" name="settings-size" value="regular" checked></input>
-                                Regular
-                            </label>
-                            <label>
-                                <input type="radio" name="settings-size" value="big"></input>
-                                Big
-                            </label>
-                            <label>
-                                <input type="radio" name="settings-size" value="mixied"></input>
-                                Mixed
-                            </label>
-                        </div>
-                    </div>
-                </form>
-                <div class="uk-modal-footer uk-text-right">
-                    <button type="button" class="uk-button uk-modal-close">Cancel</button>
-                    <button type="button" class="uk-button uk-modal-close uk-button-primary">Save</button>
-                </div>
+    <section id="modal-subscribe" class="uk-modal">
+        <div class="uk-modal-dialog">
+            <div class="uk-modal-header"><h2>Choose tag</h2></div>
+			{% for tag in avaliable_tags %}
+	        <div><p>{{ tag.name }}<input type="checkbox", value="false"></p></div>
+	        {% endfor %}
+            <div class="uk-modal-footer uk-text-right">
+                <button type="button" class="uk-button uk-modal-close uk-button-primary">Save</button>
             </div>
-        </section>
-
-        <section id="modal-subscribe" class="uk-modal">
-            <div class="uk-modal-dialog">
-                <div class="uk-modal-header"><h2>Choose tag</h2></div>
-                <div>Meh meh</div>
-                <div class="uk-modal-footer uk-text-right">
-                    <button type="button" class="uk-button uk-modal-close uk-button-primary">Save</button>
-                </div>
-                <div class="uk-modal-caption">Choose most interesting tags for you!</div>
-            </div>
-        </section>
-    </body>
-</html>
+            <div class="uk-modal-caption">Choose most interesting tags for you!</div>
+        </div>
+    </section>
+{% endblock %}
