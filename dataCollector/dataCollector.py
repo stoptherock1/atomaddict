@@ -1,9 +1,6 @@
 import database.session
 import tasks
 from dateutil import parser
-from database.session import DatabaseSessionError
-
-##python-dateutil
 
 
 def fetchDataByTag(tagName):
@@ -27,18 +24,20 @@ def fetchDataByTag(tagName):
     parsedPages = []
 
     for page in pages:
-        parsedPages.append(tasks.downloadFeeds.delay(page.uri))        #celery task
+        # celery task
+        parsedPages.append(tasks.downloadFeeds.delay(page.url)) 
 
     for parsedPage in parsedPages:
         while(False == parsedPage.ready()):
             pass
 
-        pageUrl, data = parsedPage.get()     #parsed rss feed
+        # parsed rss feed
+        pageUrl, data = parsedPage.get()
 
         for entry in data.entries:
             time = parser.parse(entry.published)
-            put.article(head=entry.title, uri=entry.link, time=time)
-            add.article_to_website(website_uri=pageUrl, article_uri=entry.link)
+            put.article(head=entry.title, url=entry.link, time=time)
+            add.article_to_website(website_url=pageUrl, article_url=entry.link)
 
     get.close_session()
     put.close_session()
