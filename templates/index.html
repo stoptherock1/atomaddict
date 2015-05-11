@@ -50,7 +50,9 @@
 			<div data-uk-filter="">
 				<div class="uk-panel uk-panel-box">
 					<div class="uk-panel-teaser">
-						<img src={{article.img}} alt="">
+						{% if article.picture%}
+						<img src={{article.picture}} alt="">
+						{% endif %}
 					</div>
 					<article class="uk-article" >
 						<h2>{{article.head}}</h2>
