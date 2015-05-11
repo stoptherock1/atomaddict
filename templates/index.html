@@ -11,6 +11,7 @@
 	</ul>
 	<div class="uk-navbar-flip">
 	    <ul class="uk-navbar-nav uk-hidden-small">
+	    	<li class="uk-navbar-brand">{{ user.nickname }}</li>
 	        <li><a href="#modal-settings" title="Settings" data-uk-modal><i class="uk-icon-cog"></i></a></li>
 	        <li><a href="{{ url_for('sign_out') }}" title="Sign out"><i class="uk-icon-sign-in"></i></a></li>
 	    </ul>
@@ -24,9 +25,13 @@
 <!-- tutaj wstawic linki do tagow, uk-filter mowi jaka kategoria bedzie, a wyswietlic mozna co sie chce -->
 <!-- cos na zasadzie <li data-uk-filter=tag.name> <a href="#tag.name">tag.name</a></li> -->
         <li data-uk-filter="" class="uk-active"><a href="#">All</a></li>
-        <li data-uk-filter="sport"><a href="#">Sport</a></li>
-        <li data-uk-filter="technologies"><a href="#">Technologies</a></li>
-        <li data-uk-filter="music"><a href="#">Music</a></li>
+		{% for tag in tags %}
+<!--         <li data-uk-filter="" class="uk-active"><a href="#">All</a></li> -->
+<!--         <li data-uk-filter="sport"><a href="#">Sport</a></li> -->
+<!--         <li data-uk-filter="technologies"><a href="#">Technologies</a></li> -->
+<!--         <li data-uk-filter="music"><a href="#">Music</a></li> -->
+			<li data-uk-filter={{ tag.name }}><a href ={{"#" + tag.name}}>{{tag.name}}</a></li>
+		{% endfor %}
     </ul>
 	<hr>
 {% endblock %}

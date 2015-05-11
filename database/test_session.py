@@ -131,6 +131,13 @@ if __name__ == "__main__":
                 for web in tag.websites:
                     print web
             
+    print "user"
+    user = get.all_users()[0]
+    
+    print user.email
+    print user.tags
+    for tag in user.tags:
+        print tag
     
     get.close_session()
     
