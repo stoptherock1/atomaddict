@@ -144,6 +144,24 @@ class Get():
     def close_session(self):
         self.session.close()
 
+    def user_tags_and_articles(self, email):
+        user = self.user(email=email)
+        if not user:
+            return None
+        tags = []
+        for tag in user.tags:
+            tags.append(tag)
+        articles = []
+        if tags:
+            for tag in tags:
+                if tag.websites:
+                    for web in tag.websites:
+                        if web.articles:
+                            for article in web.articles:
+                                articles.append((article, tag))
+        user_and_tags_and_articles = (user, tags, articles)
+        return user_and_tags_and_articles
+
     def all_users(self):
         '''Get all users as a list.'''
         users = self.session.query(User).all()

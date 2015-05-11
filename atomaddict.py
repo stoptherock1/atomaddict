@@ -12,16 +12,15 @@ def index():
     # TODO If user is logged in render index.html. Ladning page otherwise.
     get = Get()
     user = get.all_users()[0]
-    print user
-    tags = []
-    if user:
-        for tag in user.tags:
-            tags.append(tag)
-    print tags
+    (user, usertags, articles_and_tags) = \
+        get.user_tags_and_articles(email=user.email)
+    avaliable_tags = get.all_tags()
     get.close_session()
     return render_template('index.html',
                            user=user,
-                           tags=tags)
+                           usertags=usertags,
+                           avaliable_tags=avaliable_tags,
+                           articles_and_tags=articles_and_tags)
 
 
 @app.route('/signup')
@@ -48,4 +47,4 @@ def base():
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)

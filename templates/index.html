@@ -18,19 +18,11 @@
 	</div>
 	<div class="uk-navbar-content uk-navbar-center uk-hidden-small">Current category</div>
 {% endblock %}
-<!--         </nav> -->
 {% block uk_subnav %}
     <ul class="uk-subnav uk-subnav-pill uk-flex-center tags">
-<!--         	tutaj dac z jinji linki do tagow ktore ma user -->
-<!-- tutaj wstawic linki do tagow, uk-filter mowi jaka kategoria bedzie, a wyswietlic mozna co sie chce -->
-<!-- cos na zasadzie <li data-uk-filter=tag.name> <a href="#tag.name">tag.name</a></li> -->
         <li data-uk-filter="" class="uk-active"><a href="#">All</a></li>
-		{% for tag in tags %}
-<!--         <li data-uk-filter="" class="uk-active"><a href="#">All</a></li> -->
-<!--         <li data-uk-filter="sport"><a href="#">Sport</a></li> -->
-<!--         <li data-uk-filter="technologies"><a href="#">Technologies</a></li> -->
-<!--         <li data-uk-filter="music"><a href="#">Music</a></li> -->
-			<li data-uk-filter={{ tag.name }}><a href ={{"#" + tag.name}}>{{tag.name}}</a></li>
+		{% for tag in usertags %}
+			<li data-uk-filter={{tag.name}}><a href ={{"#"+tag.name}}>{{tag.name}}</a></li>
 		{% endfor %}
     </ul>
 	<hr>
@@ -40,7 +32,6 @@
 	<div id="hamburger" class="uk-offcanvas">
 	    <nav class="uk-offcanvas-bar">
 	        <ul class="uk-nav uk-nav-offcanvas">
-<!-- 	        tutaj tak samo dodac odnosniki do roznych miejsc -->
 	            <li><a href="#modal-subscribe" title="Subscribe" data-uk-modal><i class="uk-icon-rss"></i> Subscribe</a></li>
 	            <li><a href="#" title="Refresh feeds"><i class="uk-icon-refresh"></i> Refresh feeds</a></li>
 	            <li><a href="#" title="Mark as read"><i class="uk-icon-check-square-o"> Mark as read</i></a></li>
@@ -52,81 +43,29 @@
 	</div>
 {% endblock %}
 
-
 {% block articles %}
 	<div data-uk-grid="{controls: 'ul.tags', gutter: 10}">
-	
-<!-- 	z grubsza to tutaj petla for -->
-<!-- for int i = 0; i < 10; i++ -->
-
-<!-- nazwa taga -->
-<!-- <div data-uk-filter=tagname> -->
-	<!-- <div class="uk-panel-teaser"> -->
-<!-- 	tutaj zdjecie -->
-<!--          <img src="http://www.placehold.it/350x150" alt=""> -->
-<!--     </div> -->
-<!-- </div> -->
-	    <div data-uk-filter="sport">
-	        <div class="uk-panel uk-panel-box tile">
-	            <div class="uk-panel-teaser">
-	                <img src="http://www.placehold.it/350x150" alt="">
-	            </div>
-	            <article class="uk-article" style="width-max=350px";>
-	                <h2>Some sport article</h2>
-	                <div class="uk-article-meta uk-clearfix">
-	                    <span>Some website</span>
-	                    <time class="uk-float-right" datetime="2015-05-15">May 15, 2015</time>
-	                </div>
-	                <p>Very important sport event took place in Wrocław</p>
-	            </article>
-	        </div>
-	    </div>
-	    <div data-uk-filter="sport">
-	        <div class="uk-panel uk-panel-box">
-	            <div class="uk-panel-teaser">
-	                <img src="http://www.placehold.it/370x200" alt="">
-	            </div>
-	            <div>Another sport article</div>
-	        </div>
-	    </div>
-	    <div data-uk-filter="music">
-	        <div class="uk-panel uk-panel-box">
-	            <div class="uk-panel-teaser">
-	                <img src="http://www.placehold.it/350x170" alt="">
-	            </div>
-	            <div>Music article</div>
-	        </div>
-	    </div>
-	    <div data-uk-filter="sport">
-	        <div class="uk-panel uk-panel-box">
-	            <div class="uk-panel-teaser">
-	                <img src="http://www.placehold.it/200x120" alt="">
-	            </div>
-	            <div>Yet another sport</div>
-	        </div>
-	    </div>
-	    <div data-uk-filter="technologies">
-	        <div class="uk-panel uk-panel-box">
-	            <div class="uk-panel-teaser">
-	                <img src="http://www.placehold.it/350x150" alt="">
-	            </div>
-	            <div>Technologies article</div>
-	        </div>
-	    </div>
-	    <div data-uk-filter="music">
-	        <div class="uk-panel uk-panel-box">
-	            <div class="uk-panel-teaser">
-	                <img src="http://www.placehold.it/250x100" alt="">
-	            </div>
-	            <div>Another music article</div>
-	        </div>
-	    </div>
-	</div>
-	
+		{% for (article, tag) in articles_and_tags %}
+			<div data-uk-filter={{tag.name}}>
+			<div data-uk-filter="">
+				<div class="uk-panel uk-panel-box">
+					<div class="uk-panel-teaser">
+						<img src={{article.img}} alt="">
+					</div>
+					<article class="uk-article" >
+						<h2>{{article.head}}</h2>
+						<div class="uk-article-meta uk-clearfix">
+						<span><a href={{article.uri}}>link</a></span>
+						<time class="uk-float-right" datetime={{article.time}}></time>
+						</div>
+					</article>
+				</div>
+			</div>
+		{% endfor %}
+	</div>	
 {% endblock %}
 
 {% block modal %}
-	
 	<section id="modal-settings" class="uk-modal">
 	    <div class="uk-modal-dialog">
 	        <h1>Settings</h1>
@@ -168,8 +107,9 @@
 	<section id="modal-subscribe" class="uk-modal">
 	    <div class="uk-modal-dialog">
 	        <h1>Choose tag</h1>
-<!-- 	        wstawic liste tagow -->
-	        <div>Meh meh</div>
+			{% for tag in avaliable_tags %}
+	        <div><p>{{ tag.name }}<input type="checkbox", value="false"></p></div>
+	        {% endfor %}
 	        <div class="uk-modal-caption">Choose most interesting tags for you!</div>
 	    </div>
 	</section>
