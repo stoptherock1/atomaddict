@@ -25,7 +25,7 @@ def fetchDataByTag(tagName):
 
     for page in pages:
         # celery task
-        parsedPages.append(tasks.downloadFeeds.delay(page.url)) 
+        parsedPages.append(tasks.downloadFeeds.delay(page.url))
 
     for parsedPage in parsedPages:
         while(False == parsedPage.ready()):
