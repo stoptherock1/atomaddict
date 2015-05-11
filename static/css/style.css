@@ -10,3 +10,15 @@ ul.tags {
 .uk-panel.tile .uk-panel-teaser {
     margin-bottom: 5px;
 }
+
+.uk-navbar-nav a,
+.uk-navbar-nav i,
+.uk-navbar-nav li,
+.news {
+    cursor: pointer;
+}
+
+.news {
+    max-width: 400px;
+    min-width: 250px;
+}
