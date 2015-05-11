@@ -28,6 +28,6 @@ celery.conf.update(flask_app.config)
 
 ############ tasks
 @celery.task
-def downloadFeeds(url):
-    data = feedparser.parse(url)
-    return data
+def downloadFeeds(pageUrl):
+    data = feedparser.parse(pageUrl)
+    return pageUrl, data
