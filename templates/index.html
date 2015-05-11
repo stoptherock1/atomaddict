@@ -47,7 +47,7 @@
             <p>Current category has no unread items</p>
         </div>
 		{% for (article, tag) in articles_and_tags %}
-			<div data-uk-filter={{tag.name}}>
+			<div class="news" data-uk-filter={{tag.name}}>
 				<div class="uk-panel uk-panel-box tile">
 					<div class="uk-panel-teaser">
 						{% if article.picture%}

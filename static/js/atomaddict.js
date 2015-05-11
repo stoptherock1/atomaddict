@@ -24,6 +24,11 @@ $(function() {
         updateCategory($(event.target).text());
         handleEmptyCategory();
     });
+    
+    $newsWrapper.delegate('.news', 'click', function(event) {
+        // TODO Render article
+        UIkit.modal('#modal-article').show();
+    });
 
     $('#mark-as-read').click(function(event) {
         $newsWrapper.children(':visible').remove();
