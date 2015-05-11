@@ -71,7 +71,7 @@ class Article(db.Model):
     __tablename__ = 'articles'
     id = Column(Integer, primary_key=True)
     head = Column(Text())
-    content = Column(Text())
+    uri = Column(Text())
     picture = Column(Text())
     time = Column(DateTime)
 
@@ -79,5 +79,5 @@ class Article(db.Model):
     website_id = Column(Integer, ForeignKey('websites.id'))
 
     def __repr__(self):
-        return "<Article (head = '%s', content = '%s', date = '%s')>" % \
-            (self.head, self.content, self.time)
+        return "<Article (head = '%s', uri = '%s', date = '%s')>" % \
+            (self.head, self.uri, self.time)
