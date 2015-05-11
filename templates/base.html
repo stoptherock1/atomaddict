@@ -8,10 +8,11 @@
         <script src="{{ url_for('static', filename='js/jquery.js') }}"></script>
         <script src="{{ url_for('static', filename='js/uikit.js') }}"></script>
         <script src="{{ url_for('static', filename='js/components/grid.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/atomaddict.js') }}"></script>
     </head>
     <body>
     	<nav class="uk-navbar">
-			<a href="#hamburger" class="uk-navbar-toggle" data-uk-offcanvas></a>
+            <a href="#hamburger" class="uk-navbar-toggle uk-visible-small" data-uk-offcanvas></a>
             <a href="#" class="uk-navbar-brand">AtomAddict</a>
             {% block uk_navbar %}
         	{% endblock %}	

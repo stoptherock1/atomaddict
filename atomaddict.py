@@ -41,6 +41,12 @@ def sign_out():
     return redirect(url_for('index'))
 
 
+@app.route('/settings')
+def settings():
+    # TODO Save user's settings
+    return 'Settings updated'
+
+
 @app.route('/base')
 def base():
     return render_template('base.html')
