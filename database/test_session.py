@@ -40,7 +40,6 @@ if __name__ == "__main__":
 
 
 
-    
 
     put.website(uri='google.com', name='google')
     put.website(uri='wp.pl', name='wp')

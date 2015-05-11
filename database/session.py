@@ -280,7 +280,6 @@ class Add():
         self.session.commit()
 
 
-
 def clearDb():
     delete = Delete()
 

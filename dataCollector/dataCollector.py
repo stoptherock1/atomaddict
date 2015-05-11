@@ -27,19 +27,18 @@ def fetchDataByTag(tagName):
     parsedPages = []
 
     for page in pages:
-        parsedPages.append( tasks.downloadFeeds.delay(page.uri) )        #celery task
+        parsedPages.append(tasks.downloadFeeds.delay(page.uri))        #celery task
 
     for parsedPage in parsedPages:
-        while( False == parsedPage.ready() ):
+        while(False == parsedPage.ready()):
             pass
 
         pageUrl, data = parsedPage.get()     #parsed rss feed
 
         for entry in data.entries:
             time = parser.parse(entry.published)
-            put.article(head = entry.title, uri = entry.link, time = time)
-            add.article_to_website(website_uri = pageUrl, article_uri = entry.link)
-
+            put.article(head=entry.title, uri=entry.link, time=time)
+            add.article_to_website(website_uri=pageUrl, article_uri=entry.link)
 
     get.close_session()
     put.close_session()
