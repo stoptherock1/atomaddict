@@ -64,6 +64,7 @@ if __name__ == "__main__":
                      1566933,00.html?utm_source=feedburner&utm_medium=feed&utm_\
                      campaign=Feed%3A+time%2Fgadgetoftheweek+%28TIME%3A+Gadget+\
                      of+the+Week%29&utm_content=FeedBurner')
+
     put.close_session()
 
     # add some things
@@ -78,6 +79,7 @@ if __name__ == "__main__":
     add.article_to_website(website_uri=gadget_of_the_week, article_uri=a3)
     add.article_to_website(website_uri=gadget_of_the_week, article_uri=a4)
     add.article_to_website(website_uri=gadget_of_the_week, article_uri=a5)
+
     add.close_session()
 
     # get some things
@@ -124,3 +126,5 @@ if __name__ == "__main__":
         print tag
 
     get.close_session()
+    put.user(email, password, nickname)
+

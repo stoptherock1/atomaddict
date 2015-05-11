@@ -62,7 +62,7 @@ class Put():
             return website.uri
         else:
             self.session.rollback()
-            raise AlreadyExists("Websie")
+            #raise AlreadyExists("Websie")
             return None
 
     def article(self, head, uri, time=None, picture=None):
@@ -86,7 +86,9 @@ class Put():
             return article.uri
         else:
             self.session.rollback()
-            raise AlreadyExists("Article")
+
+#            raise AlreadyExists("Article")
+
             return None
 
     def tag(self, name):
@@ -105,7 +107,7 @@ class Put():
             return tag.name
         else:
             self.session.rollback()
-            raise AlreadyExists("Tag")
+            #raise AlreadyExists("Tag")
             return None
 
     def user(self, email, password, nickname=None):
@@ -130,7 +132,7 @@ class Put():
             return user.email
         else:
             self.session.rollback()
-            raise AlreadyExists("User")
+            #raise AlreadyExists("User")
             return None
 
     def close_session(self):
@@ -296,3 +298,53 @@ class Add():
             website_exists.articles.append(article_exists)
             print 'article added to website'
         self.session.commit()
+
+
+def clearDb():
+    delete = Delete()
+
+    delete.all_users()
+    delete.all_tags()
+    delete.all_websties()
+    delete.all_tags()
+    delete.all_articles()
+
+    delete.close_session()
+
+
+def addUrlsAndTagsToDb():
+    put = Put()
+    add = Add()
+
+    tag = 'Sport'
+    url = 'http://www.premierleague.com/content/premierleague/en-gb/news/newsfeed.rss'
+    name ='Barclays Premier League'
+    put.tag(tag)
+    put.website(url, name)
+    add.website_to_tag(tag, url)
+
+    tag = 'News'
+    url = 'https://news.google.com/news?pz=1&cf=all&ned=us&hl=en&topic=h&num=3&output=rss'
+    name ='Google News'
+    put.tag(tag)
+    put.website(url, name)
+    add.website_to_tag(tag, url)
+
+    url = 'http://www.huffingtonpost.com/feeds/verticals/germany/index.xml'
+    name ='HuffingtonPost'
+    put.website(url, name)
+    add.website_to_tag(tag, url)
+
+    url = 'http://www.nytimes.com/services/xml/rss/nyt/HomePage.xml'
+    name ='New York Times'
+    put.website(url, name)
+    add.website_to_tag(tag, url)
+
+    url = 'http://www.dailymail.co.uk/home/index.rss'
+    name ='Daily Mail'
+    put.website(url, name)
+    add.website_to_tag(tag, url)
+
+
+    add.close_session()
+    put.close_session()
