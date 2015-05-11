@@ -3,7 +3,7 @@
 
 from flask import Flask, render_template, redirect, url_for
 from database.session import Get
-from dataCollector import dataCollector
+from dataCollector.dataCollector import fetchDataByTag
 
 app = Flask(__name__)
 
@@ -17,7 +17,7 @@ def index():
         get.user_tags_and_articles(email=user.email)
     avaliable_tags = get.all_tags()
     for tags in avaliable_tags:
-        dataCollector.fetchDataByTag(tags.name)
+        fetchDataByTag(tags.name)
     get.close_session()
     return render_template('index.html',
                            user=user,
