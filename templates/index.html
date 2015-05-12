@@ -1,28 +1,26 @@
-<!DOCTYPE html>
 <!-- extends from base layout -->
 {% extends "base.html" %}
 
 
 {% block uk_navbar %}
-	<ul class="uk-navbar-nav">
-	    <li><a href="#modal-subscribe" title="Add feed" data-uk-modal><i class="uk-icon-rss"></i></a></li>
-	    <li><a href="#" title="Refresh feeds"><i class="uk-icon-refresh"></i></a></li>
-	    <li><a href="#" title="Mark as read"><i class="uk-icon-check-square-o"></i></a></li>
-	</ul>
-	<div class="uk-navbar-flip">
-	    <ul class="uk-navbar-nav uk-hidden-small">
-	    	<li class="uk-navbar-brand">{{ user.nickname }}</li>
-	        <li><a href="#modal-settings" title="Settings" data-uk-modal><i class="uk-icon-cog"></i></a></li>
-	        <li><a href="{{ url_for('sign_out') }}" title="Sign out"><i class="uk-icon-sign-in"></i></a></li>
-	    </ul>
-	</div>
-	<div class="uk-navbar-content uk-navbar-center uk-hidden-small">Current category</div>
+    <ul class="uk-navbar-nav">
+        <li><a href="#modal-subscribe" title="Add feed" data-uk-modal><i class="uk-icon-rss"></i></a></li>
+        <li><a href="#" title="Refresh feeds"><i class="uk-icon-refresh"></i></a></li>
+        <li><a id="mark-as-read" href="#" title="Mark as read"><i class="uk-icon-check-square-o"></i></a></li>
+    </ul>
+    <div class="uk-navbar-flip">
+        <ul class="uk-navbar-nav uk-hidden-small">
+            <li><a href="#modal-settings" title="Settings" data-uk-modal><i class="uk-icon-cog"></i></a></li>
+            <li><a href="{{ url_for('sign_out') }}" title="Sign out"><i class="uk-icon-sign-in"></i></a></li>
+        </ul>
+    </div>
+    <div id="tagMarker" class="uk-navbar-content uk-navbar-center uk-hidden-small">All</div>
 {% endblock %}
 {% block uk_subnav %}
     <ul class="uk-subnav uk-subnav-pill uk-flex-center tags">
         <li data-uk-filter="" class="uk-active"><a href="#">All</a></li>
 		{% for tag in usertags %}
-			<li data-uk-filter={{tag.name}}><a href ={{"#"+tag.name}}>{{tag.name}}</a></li>
+			<li data-uk-filter={{tag.name}}><a href="#">{{tag.name}}</a></li>
 		{% endfor %}
     </ul>
 	<hr>
@@ -44,22 +42,25 @@
 {% endblock %}
 
 {% block articles %}
-	<div data-uk-grid="{controls: 'ul.tags', gutter: 10}">
+    <div id="news-list" data-uk-grid="{controls: 'ul.tags', gutter: 10}">
+        <div id="no-news" class="uk-panel uk-panel-box uk-panel-box-secondary uk-width-medium-1-4 uk-container-center uk-text-center uk-hidden">
+            <p>Current category has no unread items</p>
+        </div>
 		{% for (article, tag) in articles_and_tags %}
-			<div data-uk-filter={{tag.name}}>
-			<div data-uk-filter="">
-				<div class="uk-panel uk-panel-box">
+			<div class="news" data-uk-filter={{tag.name}}>
+				<div class="uk-panel uk-panel-box tile">
 					<div class="uk-panel-teaser">
 						{% if article.picture%}
 						<img src={{article.picture}} alt="">
 						{% endif %}
 					</div>
-					<article class="uk-article" >
+					<article class="uk-article">
 						<h2>{{article.head}}</h2>
 						<div class="uk-article-meta uk-clearfix">
-						<span><a href={{article.uri}}>link</a></span>
-						<time class="uk-float-right" datetime={{article.time}}></time>
+                            <a class="link-external" href={{article.uri}} target="blank">Read full article</a>
+                            <time class="uk-float-right" datetime={{article.time.strftime('%Y-%m-%d %H:%M')}}>{{article.time.strftime('%d %b, %H:%M')}}</time>
 						</div>
+                        <!--p>TODO: Some lead</p-->
 					</article>
 				</div>
 			</div>
@@ -68,51 +69,66 @@
 {% endblock %}
 
 {% block modal %}
-	<section id="modal-settings" class="uk-modal">
-	    <div class="uk-modal-dialog">
-	        <h1>Settings</h1>
-	        <form class="uk-form uk-form-horizontal">
-	            <div class="uk-form-row">
-	                <label class="uk-form-label" for="settings-language">Language</label>
-	                <div class="uk-form-controls">
-	                    <select id="settings-language">
-	                        <option value="en">English</option>
-	                        <option value="pl">Polski</option>
-	                    </select>
-	                </div>
-	            </div>
-	            <div class="uk-form-row">
-	                <span class="uk-form-label">Tiles size</span>
-	                <div class="uk-form-controls uk-forms-controls-text">
-	                    <label>
-	                        <input type="radio" name="settings-size" value="small"></input>
-	                        Small
-	                    </label>
-	                    <label>
-	                        <input type="radio" name="settings-size" value="regular"></input>
-	                        Regular
-	                    </label>
-	                    <label>
-	                        <input type="radio" name="settings-size" value="big"></input>
-	                        Big
-	                    </label>
-	                    <label>
-	                        <input type="radio" name="settings-size" value="mixied"></input>
-	                        Mixed
-	                    </label>
-	                </div>
-	            </div>
-	        </form>
-	    </div>
-	</section>
-	
-	<section id="modal-subscribe" class="uk-modal">
-	    <div class="uk-modal-dialog">
-	        <h1>Choose tag</h1>
+    <section id="modal-settings" class="uk-modal">
+        <div class="uk-modal-dialog">
+            <div class="uk-modal-header"><h2>Settings</h2></div>
+            <form class="uk-form uk-form-horizontal" action="{{ url_for('settings') }}" method="post">
+                <div class="uk-form-row">
+                    <label class="uk-form-label" for="settings-language">Language</label>
+                    <div class="uk-form-controls">
+                        <select id="settings-language">
+                            <option value="en">English</option>
+                            <option value="pl">Polski</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="uk-form-row">
+                    <span class="uk-form-label">Tiles size</span>
+                    <div class="uk-form-controls uk-forms-controls-text">
+                        <label>
+                            <input type="radio" name="settings-size" value="small"></input>
+                            Small
+                        </label>
+                        <label>
+                            <input type="radio" name="settings-size" value="regular" checked></input>
+                            Regular
+                        </label>
+                        <label>
+                            <input type="radio" name="settings-size" value="big"></input>
+                            Big
+                        </label>
+                        <label>
+                            <input type="radio" name="settings-size" value="mixied"></input>
+                            Mixed
+                        </label>
+                    </div>
+                </div>
+            </form>
+            <div class="uk-modal-footer uk-text-right">
+                <button type="button" class="uk-button uk-modal-close">Cancel</button>
+                <button type="button" class="uk-button uk-modal-close uk-button-primary">Save</button>
+            </div>
+        </div>
+    </section>
+
+    <section id="modal-subscribe" class="uk-modal">
+        <div class="uk-modal-dialog">
+            <div class="uk-modal-header"><h2>Choose tag</h2></div>
 			{% for tag in avaliable_tags %}
 	        <div><p>{{ tag.name }}<input type="checkbox", value="false"></p></div>
 	        {% endfor %}
-	        <div class="uk-modal-caption">Choose most interesting tags for you!</div>
-	    </div>
-	</section>
+            <div class="uk-modal-footer uk-text-right">
+                <button type="button" class="uk-button uk-modal-close uk-button-primary">Save</button>
+            </div>
+            <div class="uk-modal-caption">Choose most interesting tags for you!</div>
+        </div>
+    </section>
+
+    <section id="modal-article" class="uk-modal">
+        <div class="uk-modal-dialog uk-modal-dialog-large">
+            <h4>{ Title of an article }</h4>
+            <div class="uk-overflow-container">
+                <p>{ Content goes here }</p>
+            </div>
+    </section>
 {% endblock %}
