@@ -29,8 +29,14 @@ $(function() {
     });
     
     $newsWrapper.delegate('.news', 'click', function(event) {
-        // TODO Render article
-        UIkit.modal('#modal-article').show();
+        var $target = $(event.target);
+
+        if ($target.hasClass('link-external')) {
+            $target.parents('.news').remove();
+        } else {
+            // TODO Render article
+            UIkit.modal('#modal-article').show();
+        }
     });
 
     $('#mark-as-read').click(function(event) {
