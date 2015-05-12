@@ -3,7 +3,6 @@
 
 from flask import Flask, render_template, redirect, url_for
 from database.session import Get
-from dataCollector.dataCollector import fetchDataByTag
 
 app = Flask(__name__)
 
