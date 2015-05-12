@@ -10,7 +10,7 @@ def fetchDataByTag(tagName):
     add = database.session.Add()
 
     pages = []
-
+    
     if tagName == 'all':
         pages = get.all_websites()
     else:
