@@ -26,6 +26,7 @@ def make_celery(app):
     return celery
 
 
+
 # main
 flask_app = Flask(__name__)
 

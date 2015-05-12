@@ -1,4 +1,4 @@
-from database.session import Delete, Get, Put, Add
+from database.session import Delete, Get, Put, Add, clearDb
 
 
 if __name__ == "__main__":
@@ -10,6 +10,8 @@ if __name__ == "__main__":
 #     delete.all_tags()
 #     delete.all_articles()
 #     delete.close_session()
+
+#     clearDb()
     # You can delete also by delete.user(email='...')
     # put some things
     put = Put()
@@ -61,7 +63,9 @@ of+the+Week%29&utm_content=FeedBurner')
     add.article_to_website(website_url=gadget_of_the_week, article_url=a3)
     add.article_to_website(website_url=gadget_of_the_week, article_url=a4)
     add.article_to_website(website_url=gadget_of_the_week, article_url=a5)
-
+    
+    
+    
     add.close_session()
 
     # get some things
