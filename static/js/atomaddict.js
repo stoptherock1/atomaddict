@@ -29,14 +29,19 @@ $(function() {
     });
     
     $newsWrapper.delegate('.news', 'click', function(event) {
-        var $target = $(event.target);
+        var $target = $(event.target),
+            $this = $(this);
 
+        window.open($this.attr('data-url'));
+        //$this.remove();
+        /*
         if ($target.hasClass('link-external')) {
             $target.parents('.news').remove();
         } else {
             // TODO Render article
             UIkit.modal('#modal-article').show();
         }
+        */
     });
 
     $('#mark-as-read').click(function(event) {
