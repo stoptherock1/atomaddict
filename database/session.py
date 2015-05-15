@@ -327,6 +327,16 @@ def addUrlsAndTagsToDb():
     put.website(url, name)
     add.website_to_tag(tag, url)
 
+    url = 'http://www.nytimes.com/services/xml/rss/nyt/Sports.xml'
+    name = 'New York Times - Sport'
+    put.website(url, name)
+    add.website_to_tag(tag, url)
+
+    url = 'http://www.sportingnews.com/rss'
+    name = 'Sporting News'
+    put.website(url, name)
+    add.website_to_tag(tag, url)
+
     tag = 'News'
     url = 'https://news.google.com/news?pz=1&cf=all&ned=us&hl=en&topic=h&num=3&output=rss'
     name = 'Google News'
@@ -339,8 +349,8 @@ def addUrlsAndTagsToDb():
     put.website(url, name)
     add.website_to_tag(tag, url)
 
-    url = 'http://www.nytimes.com/services/xml/rss/nyt/HomePage.xml'
-    name = 'New York Times'
+    url = 'http://rss.cnn.com/rss/si_topstories.rss'
+    name = 'Sport Illustrated'
     put.website(url, name)
     add.website_to_tag(tag, url)
 
