@@ -2,6 +2,7 @@ from database.model import db
 from sqlalchemy.orm import sessionmaker
 from database.model.models import User, Tag, Website, Article
 from datetime import datetime
+from matplotlib.style.core import available
 
 Session = sessionmaker(bind=db.engine)
 
@@ -137,6 +138,27 @@ class Get():
 
     def close_session(self):
         self.session.close()
+
+    def user_tags_as_dictionary(self, email):
+        '''Return user tags as a dictionary
+
+            Dictionary of all tasks and boolean
+            value which describes whether
+            the user has that tag.
+        '''
+        user = self.user(email=email)
+        if not user:
+            return None
+        user_tags = []
+        for tag in user.tags:
+            user_tags.append(tag)
+
+        available_tags = self.all_tags()
+
+        all_tags = dict((tag.name, tag in user_tags)
+                        for tag in available_tags)
+
+        return all_tags
 
     def user_tags_and_articles(self, email):
         user = self.user(email=email)

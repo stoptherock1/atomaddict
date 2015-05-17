@@ -10,7 +10,7 @@ def fetchDataByTag(tagName):
     add = database.session.Add()
 
     pages = []
-    
+
     if tagName == 'all':
         pages = get.all_websites()
     else:
@@ -38,7 +38,6 @@ def fetchDataByTag(tagName):
             time = parser.parse(entry.published)
             put.article(head=entry.title, url=entry.link, time=time)
             add.article_to_website(website_url=pageUrl, article_url=entry.link)
-            
 
     get.close_session()
     put.close_session()

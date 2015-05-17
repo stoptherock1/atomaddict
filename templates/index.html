@@ -19,8 +19,10 @@
 {% block uk_subnav %}
     <ul class="uk-subnav uk-subnav-pill uk-flex-center tags">
         <li data-uk-filter="" class="uk-active"><a href="#">All</a></li>
-		{% for tag in usertags %}
-			<li data-uk-filter={{tag.name}}><a href="#">{{tag.name}}</a></li>
+		{% for (tag, is_user_tag) in tags.items() %}
+			{% if is_user_tag %}
+				<li data-uk-filter={{tag}}><a href="#">{{ tag }}</a></li>
+			{% endif %}
 		{% endfor %}
     </ul>
 	<hr>
@@ -104,9 +106,11 @@
                     </div>
                 </div>
             </form>
+            
+           
             <div class="uk-modal-footer uk-text-right">
                 <button type="button" class="uk-button uk-modal-close">Cancel</button>
-                <button type="button" class="uk-button uk-modal-close uk-button-primary">Save</button>
+                <button type="button" class="uk-button uk-modal-close uk-button-primary" value="asf">Save</button>
             </div>
         </div>
     </section>
@@ -114,12 +118,19 @@
     <section id="modal-subscribe" class="uk-modal">
         <div class="uk-modal-dialog">
             <div class="uk-modal-header"><h2>Choose tag</h2></div>
-			{% for tag in avaliable_tags %}
-	        <div><p>{{ tag.name }}<input type="checkbox", value="false"></p></div>
-	        {% endfor %}
-            <div class="uk-modal-footer uk-text-right">
-                <button type="button" class="uk-button uk-modal-close uk-button-primary">Save</button>
-            </div>
+            	<form method="post" action="{{ url_for('save_tags') }}">
+					{% for (tag, bool) in tags.items() %}
+						{% if bool %} 
+			        		<div><p>{{ tag }}<input type="checkbox", name="{{ tag.name }}" checked></p></div>
+			        	{% else %}
+			        		<div><p>{{ tag }}<input type="checkbox", name="{{ tag.name }}"></p></div>
+			        	{% endif %}
+			        {% endfor %}
+		            <div class="uk-modal-footer uk-text-right">
+		                <button type="submit" class="uk-button uk-modal-close uk-button-primary">Save</button>
+		            </div>
+	            </form>
+   
             <div class="uk-modal-caption">Choose most interesting tags for you!</div>
         </div>
     </section>
