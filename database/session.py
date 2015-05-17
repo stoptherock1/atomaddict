@@ -175,7 +175,7 @@ class Get():
                         if web.articles:
                             for article in web.articles:
                                 articles.append((article, tag))
-        user_and_tags_and_articles = (user, tags, articles)
+        user_and_tags_and_articles = (user, articles)
         return user_and_tags_and_articles
 
     def all_users(self):
@@ -383,3 +383,24 @@ def addUrlsAndTagsToDb():
 
     add.close_session()
     put.close_session()
+
+
+def set_user_tags(email, tags):
+    session = Session()
+    user = session.query(User).filter_by(email=email).first()
+    if not user:
+        session.close()
+        return None
+    for tag in user.tags:
+        if tag.name not in tags:
+            user.tags.remove(tag)
+    for name in tags:
+        tag = session.query(Tag).filter_by(name=name).first()
+        if not tag:
+            return None
+        if tag not in user.tags:
+            user.tags.append(tag)
+    session.commit()
+    session.close()
+
+ 

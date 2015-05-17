@@ -118,16 +118,17 @@
     <section id="modal-subscribe" class="uk-modal">
         <div class="uk-modal-dialog">
             <div class="uk-modal-header"><h2>Choose tag</h2></div>
-            	<form method="post" action="{{ url_for('save_tags') }}">
+            	<form id="choose-tags" method="POST" action="{{ url_for('save_tags') }}">
 					{% for (tag, bool) in tags.items() %}
 						{% if bool %} 
-			        		<div><p>{{ tag }}<input type="checkbox", name="{{ tag.name }}" checked></p></div>
+			        		<div><p>{{ tag }}<input type="checkbox", name="{{ tag }}" value="True" checked></p></div>
 			        	{% else %}
-			        		<div><p>{{ tag }}<input type="checkbox", name="{{ tag.name }}"></p></div>
+			        		<div><p>{{ tag }}<input type="checkbox", name="{{ tag }}" value="True"></p></div>
 			        	{% endif %}
 			        {% endfor %}
+			        <input type="submit">
 		            <div class="uk-modal-footer uk-text-right">
-		                <button type="submit" class="uk-button uk-modal-close uk-button-primary">Save</button>
+		                <button class="uk-button uk-modal-close uk-button-primary">Save</button>
 		            </div>
 	            </form>
    

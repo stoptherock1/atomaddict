@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from flask import Flask, render_template, redirect, url_for, json
-from database.session import Get
+from database.session import Get, set_user_tags
 from flask.wrappers import Response, Request
 from flask.globals import request
 
@@ -11,19 +11,29 @@ app = Flask(__name__)
 
 @app.route('/save_tags', methods=['GET', 'POST'])
 def save_tags():
-    req = request.form
-    print req
-
-
-@app.route('/', methods=['GET', 'POST'])
-def index():
-    # TODO If user is logged in render index.html. Ladning page otherwise.
+    # get default user
     get = Get()
     user = get.all_users()[0]
-    (user, usertags, articles_and_tags) = \
-        get.user_tags_and_articles(email=user.email)
+    tags = []
+    for req in request.form:
+        tags.append(req)
+
+    # refresh user tags
+    set_user_tags(email=user.email, tags=tags)
+
+    get.close_session()
+    return redirect(url_for('index'))
+
+
+@app.route('/')
+def index():
+    # TODO If user is logged in render index.html. Ladning page otherwise.
+
+    # get default user
+    get = Get()
+    user = get.all_users()[0]
+    (user, articles_and_tags) = get.user_tags_and_articles(email=user.email)
     avaliable_tags = get.all_tags()
-    print avaliable_tags
     get.close_session()
 
     tags = get.user_tags_as_dictionary(email=user.email)
@@ -32,8 +42,6 @@ def index():
     return render_template('index.html',
                            user=user,
                            tags=tags,
-                           usertags=usertags,
-                           avaliable_tags=avaliable_tags,
                            articles_and_tags=articles_and_tags)
 
 
