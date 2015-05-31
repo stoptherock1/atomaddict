@@ -2,7 +2,6 @@ from database.model import db
 from sqlalchemy.orm import sessionmaker
 from database.model.models import User, Tag, Website, Article
 from datetime import datetime
-from matplotlib.style.core import available
 
 Session = sessionmaker(bind=db.engine)
 
@@ -81,9 +80,6 @@ class Put():
             return article.url
         else:
             self.session.rollback()
-
-#            raise AlreadyExists("Article")
-
             return None
 
     def tag(self, name):
@@ -160,6 +156,7 @@ class Get():
 
         return all_tags
 
+    # articles based on tags
     def user_tags_and_articles(self, email):
         user = self.user(email=email)
         if not user:
@@ -200,7 +197,7 @@ class Get():
 
     def all_tags(self):
         '''Get all tags as a list.'''
-        tags = self.session.query(Tag).all()
+        tags = self.session.query(Tag).order_by(Tag.name).all()
         return tags
 
     def tag(self, name):
@@ -323,6 +320,11 @@ class Add():
                 return
         website_exists.articles.append(article_exists)
         print 'article added to website'
+        #dodanie nowych artykulow uzytkwnikom
+        if website_exists.tag:
+            tag = website_exists.tag
+            for user in tag.users:
+                user.articles.append(article)
         self.session.commit()
 
 
@@ -385,22 +387,96 @@ def addUrlsAndTagsToDb():
     put.close_session()
 
 
+# when user choose tag from list
 def set_user_tags(email, tags):
     session = Session()
     user = session.query(User).filter_by(email=email).first()
     if not user:
         session.close()
         return None
+    # remove tag from user
     for tag in user.tags:
         if tag.name not in tags:
             user.tags.remove(tag)
+            # remove articles
+            remove_articles_from_user(user=user, tag=tag)
+    # add last ten articles
     for name in tags:
         tag = session.query(Tag).filter_by(name=name).first()
         if not tag:
             return None
         if tag not in user.tags:
             user.tags.append(tag)
+            # add first 10 articles
+            add_articles_to_user_after_checking_tag(user, tag)
     session.commit()
     session.close()
 
- 
+
+# remove articles from user
+def remove_articles_from_user(user, tag):
+    '''After deleting tag it removes articles from user
+    '''
+    for article in user.articles:
+        if article.website.tag == tag:
+            user.articles.remove(article)
+
+
+def add_articles_to_user_after_checking_tag(user, tag):
+    '''Adds articles to user after selecting tag checkbox
+
+        It adds 10 articles per each site to user
+    '''
+    if tag.websites:
+        for web in tag.websites:
+            if web.articles:
+                articles = web.articles
+                nr_of_added_articles = 0
+                for article in articles:
+                    user.articles.append(article)
+                    nr_of_added_articles += 1
+                    if nr_of_added_articles > 10:
+                        break
+
+
+def get_user_unreaded_articles_as_dict(email, tagname=None):
+    '''Returns dictionary of tags and lists of articles
+
+        {'tag.name' : [article1, article2, article3], ...}
+        It returns articles for tagname, if tagname is None
+        it returns dictionary of lists of articles for all tags that
+        user has.
+    '''
+    session = Session()
+    user = session.query(User).filter_by(email=email).first()
+    if not user:
+        session.close()
+        return None
+
+    tags_and_articles = []
+    if not tagname:
+        tags = user.tags
+        if not tags:
+            session.close()
+            return None
+        articles = user.articles
+        for tag in tags:
+            article_for_tag = []
+            for art in articles:
+                if art.website.tag is tag:
+                    article_for_tag.append(art)
+            tags_and_articles.append([tag.name, article_for_tag])
+    else:
+        tag = session.query(Tag).filter_by(name=tagname).first()
+        if not tag:
+            session.close()
+            return None
+        articles = user.articles
+        article_for_tag = []
+        for art in articles:
+            if art.website.tag is tag:
+                article_for_tag.append(art)
+        tags_and_articles.append([tag.name, article_for_tag])
+
+    session.close()
+    return dict(tags_and_articles)

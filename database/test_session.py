@@ -29,7 +29,7 @@ gadgetoftheweek',
     world_news = put.tag(name='Worlds News')
 
     science = put.tag(name='Science')
-    
+
     sport = put.tag(name='Sport')
 
     a3 = put.article(head='3DConnexion SpaceNavigator',
