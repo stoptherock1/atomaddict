@@ -52,6 +52,12 @@ docs/_build/
 
 # PyBuilder
 target/
+
+# Misc
 /.settings/
 /.project
 /.pydevproject
+=======
+
+# Vim PyMode
+.ropeproject

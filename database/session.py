@@ -27,11 +27,6 @@ class DatabaseSessionError(Exception):
         return self.message
 
 
-class AlreadyExists(DatabaseSessionError):
-    def __init__(self, value):
-        super(AlreadyExists, self).__init__(value + 'already exist')
-
-
 class FunctionParameterError(DatabaseSessionError):
     def __init__(self, message):
         super(FunctionParameterError, self).__init__('Not all parameters'
@@ -43,50 +38,48 @@ class Put():
     def __init__(self):
         self.session = Session()
 
-    def website(self, uri, name=None):
+    def website(self, url, name=None):
         '''Create website.
 
-        Name and uri are necessary.
-        Uri must be unique.
+        Name and url are necessary.
+        url must be unique.
         '''
-        if not uri or uri is "":
-            raise FunctionParameterError("Uri is necessary")
+        if not url or url is "":
+            raise FunctionParameterError("url is necessary")
         if not name or name is "":
-            name = uri
-        website_exists = self.session.query(Website).filter_by(uri=uri).all()
+            name = url
+        website_exists = self.session.query(Website).filter_by(url=url).all()
         if not website_exists:
-            website = Website(uri=uri, name=name)
+            website = Website(url=url, name=name)
             self.session.add(website)
             self.session.commit()
             print "Website added with success"
-            return website.uri
+            return website.url
         else:
             self.session.rollback()
-            #raise AlreadyExists("Websie")
             return None
 
-    def article(self, head, uri, time=None, picture=None):
+    def article(self, head, url, time=None, picture=None):
         '''Create article.
 
-        Head and uri are necessary.
+        Head and url are necessary.
         '''
         if not head or head is "":
             raise FunctionParameterError("Head is necessary")
-        if not uri or uri is "":
+        if not url or url is "":
             raise FunctionParameterError("Content is necessary")
-        uri_exist = self.session.query(Article).filter_by(uri=uri).all()
-        if not uri_exist:
+        url_exist = self.session.query(Article).filter_by(url=url).all()
+        if not url_exist:
             if not time:
                 time = datetime.utcnow()
-            article = Article(head=head, uri=uri, time=time,
+            article = Article(head=head, url=url, time=time,
                               picture=picture)
             self.session.add(article)
             self.session.commit()
             print "Article added with succes"
-            return article.uri
+            return article.url
         else:
             self.session.rollback()
-            #raise AlreadyExists("Article")
             return None
 
     def tag(self, name):
@@ -105,7 +98,6 @@ class Put():
             return tag.name
         else:
             self.session.rollback()
-            #raise AlreadyExists("Tag")
             return None
 
     def user(self, email, password, nickname=None):
@@ -130,7 +122,6 @@ class Put():
             return user.email
         else:
             self.session.rollback()
-            #raise AlreadyExists("User")
             return None
 
     def close_session(self):
@@ -143,6 +134,46 @@ class Get():
 
     def close_session(self):
         self.session.close()
+
+    def user_tags_as_dictionary(self, email):
+        '''Return user tags as a dictionary
+
+            Dictionary of all tasks and boolean
+            value which describes whether
+            the user has that tag.
+        '''
+        user = self.user(email=email)
+        if not user:
+            return None
+        user_tags = []
+        for tag in user.tags:
+            user_tags.append(tag)
+
+        available_tags = self.all_tags()
+
+        all_tags = dict((tag.name, tag in user_tags)
+                        for tag in available_tags)
+
+        return all_tags
+
+    # articles based on tags
+    def user_tags_and_articles(self, email):
+        user = self.user(email=email)
+        if not user:
+            return None
+        tags = []
+        for tag in user.tags:
+            tags.append(tag)
+        articles = []
+        if tags:
+            for tag in tags:
+                if tag.websites:
+                    for web in tag.websites:
+                        if web.articles:
+                            for article in web.articles:
+                                articles.append((article, tag))
+        user_and_tags_and_articles = (user, articles)
+        return user_and_tags_and_articles
 
     def all_users(self):
         '''Get all users as a list.'''
@@ -159,14 +190,14 @@ class Get():
         websites = self.session.query(Website).all()
         return websites
 
-    def website(self, uri):
-        '''Get website with given uri'''
-        website = self.session.query(Website).filter_by(uri=uri).first()
+    def website(self, url):
+        '''Get website with given url'''
+        website = self.session.query(Website).filter_by(url=url).first()
         return website
 
     def all_tags(self):
         '''Get all tags as a list.'''
-        tags = self.session.query(Tag).all()
+        tags = self.session.query(Tag).order_by(Tag.name).all()
         return tags
 
     def tag(self, name):
@@ -179,9 +210,9 @@ class Get():
         articles = self.session.query(Article).all()
         return articles
 
-    def article(self, uri):
+    def article(self, url):
         '''Get user with given email'''
-        article = self.session.query(Article).filter_by(uri=uri).first()
+        article = self.session.query(Article).filter_by(url=url).first()
         return article
 
 
@@ -192,8 +223,8 @@ class Delete():
     def close_session(self):
         self.session.close()
 
-    def website(self, uri):
-        website = self.session.query(Website).filter_by(uri=uri).first()
+    def website(self, url):
+        website = self.session.query(Website).filter_by(url=url).first()
         self.session.delete(website)
         self.session.commit()
 
@@ -202,8 +233,8 @@ class Delete():
         self.session.delete(tag)
         self.session.commit()
 
-    def artticle(self, uri):
-        article = self.session.query(Article).filter_by(uri=uri).first()
+    def artticle(self, url):
+        article = self.session.query(Article).filter_by(url=url).first()
         self.session.delete(article)
         self.session.commit()
 
@@ -249,36 +280,52 @@ class Add():
     def close_session(self):
         self.session.close()
 
-    def website_to_tag(self, tagname, website_uri):
+    def website_to_tag(self, tagname, website_url):
         '''Add website to tag'''
         tag_exists = self.session.query(Tag).filter_by(name=tagname).first()
         website_exists = self.session.query(Website).\
-            filter_by(uri=website_uri).first()
-        if tag_exists and website_exists:
-            tag_exists.websites.append(website_exists)
-            print 'website added to tag'
+            filter_by(url=website_url).first()
+        if not tag_exists or not website_exists:
+            return
+        for website in tag_exists.websites:
+            if website is website_exists:
+                return
+        tag_exists.websites.append(website_exists)
+        print 'website added to tag'
         self.session.commit()
 
     def tag_to_user(self, email, tagname):
         '''Add tag to user'''
         user_exists = self.session.query(User).filter_by(email=email).first()
         tag_exists = self.session.query(Tag).filter_by(name=tagname).first()
-        if tag_exists and user_exists:
-            user_exists.tags.append(tag_exists)
-            print 'tag added to user'
+        if not user_exists or not tag_exists:
+            return
+        for tag in user_exists.tags:
+            if tag is tag_exists:
+                return
+        user_exists.tags.append(tag_exists)
+        print 'tag added to user'
         self.session.commit()
 
-    def article_to_website(self, website_uri, article_uri):
+    def article_to_website(self, website_url, article_url):
         '''Add article to website'''
-        website_exists = self.session.query(Website).filter_by(uri=website_uri).\
+        website_exists = self.session.query(Website).filter_by(url=website_url).\
             first()
-        article_exists = self.session.query(Article).filter_by(uri=article_uri).\
+        article_exists = self.session.query(Article).filter_by(url=article_url).\
             first()
-        if website_exists and article_exists:
-            website_exists.articles.append(article_exists)
-            print 'article added to website'
+        if not website_exists or not article_exists:
+            return
+        for article in website_exists.articles:
+            if article is article_exists:
+                return
+        website_exists.articles.append(article_exists)
+        print 'article added to website'
+        #dodanie nowych artykulow uzytkwnikom
+        if website_exists.tag:
+            tag = website_exists.tag
+            for user in tag.users:
+                user.articles.append(article)
         self.session.commit()
-
 
 
 def clearDb():
@@ -299,33 +346,137 @@ def addUrlsAndTagsToDb():
 
     tag = 'Sport'
     url = 'http://www.premierleague.com/content/premierleague/en-gb/news/newsfeed.rss'
-    name ='Barclays Premier League'
+    name = 'Barclays Premier League'
     put.tag(tag)
+    put.website(url, name)
+    add.website_to_tag(tag, url)
+
+    url = 'http://www.nytimes.com/services/xml/rss/nyt/Sports.xml'
+    name = 'New York Times - Sport'
+    put.website(url, name)
+    add.website_to_tag(tag, url)
+
+    url = 'http://www.sportingnews.com/rss'
+    name = 'Sporting News'
     put.website(url, name)
     add.website_to_tag(tag, url)
 
     tag = 'News'
     url = 'https://news.google.com/news?pz=1&cf=all&ned=us&hl=en&topic=h&num=3&output=rss'
-    name ='Google News'
+    name = 'Google News'
     put.tag(tag)
     put.website(url, name)
     add.website_to_tag(tag, url)
 
     url = 'http://www.huffingtonpost.com/feeds/verticals/germany/index.xml'
-    name ='HuffingtonPost'
+    name = 'HuffingtonPost'
     put.website(url, name)
     add.website_to_tag(tag, url)
 
-    url = 'http://www.nytimes.com/services/xml/rss/nyt/HomePage.xml'
-    name ='New York Times'
+    url = 'http://rss.cnn.com/rss/si_topstories.rss'
+    name = 'Sport Illustrated'
     put.website(url, name)
     add.website_to_tag(tag, url)
 
     url = 'http://www.dailymail.co.uk/home/index.rss'
-    name ='Daily Mail'
+    name = 'Daily Mail'
     put.website(url, name)
     add.website_to_tag(tag, url)
 
-
     add.close_session()
     put.close_session()
+
+
+# when user choose tag from list
+def set_user_tags(email, tags):
+    session = Session()
+    user = session.query(User).filter_by(email=email).first()
+    if not user:
+        session.close()
+        return None
+    # remove tag from user
+    for tag in user.tags:
+        if tag.name not in tags:
+            user.tags.remove(tag)
+            # remove articles
+            remove_articles_from_user(user=user, tag=tag)
+    # add last ten articles
+    for name in tags:
+        tag = session.query(Tag).filter_by(name=name).first()
+        if not tag:
+            return None
+        if tag not in user.tags:
+            user.tags.append(tag)
+            # add first 10 articles
+            add_articles_to_user_after_checking_tag(user, tag)
+    session.commit()
+    session.close()
+
+
+# remove articles from user
+def remove_articles_from_user(user, tag):
+    '''After deleting tag it removes articles from user
+    '''
+    for article in user.articles:
+        if article.website.tag == tag:
+            user.articles.remove(article)
+
+
+def add_articles_to_user_after_checking_tag(user, tag):
+    '''Adds articles to user after selecting tag checkbox
+
+        It adds 10 articles per each site to user
+    '''
+    if tag.websites:
+        for web in tag.websites:
+            if web.articles:
+                articles = web.articles
+                nr_of_added_articles = 0
+                for article in articles:
+                    user.articles.append(article)
+                    nr_of_added_articles += 1
+                    if nr_of_added_articles > 10:
+                        break
+
+
+def get_user_unreaded_articles_as_dict(email, tagname=None):
+    '''Returns dictionary of tags and lists of articles
+
+        {'tag.name' : [article1, article2, article3], ...}
+        It returns articles for tagname, if tagname is None
+        it returns dictionary of lists of articles for all tags that
+        user has.
+    '''
+    session = Session()
+    user = session.query(User).filter_by(email=email).first()
+    if not user:
+        session.close()
+        return None
+
+    tags_and_articles = []
+    if not tagname:
+        tags = user.tags
+        if not tags:
+            session.close()
+            return None
+        articles = user.articles
+        for tag in tags:
+            article_for_tag = []
+            for art in articles:
+                if art.website.tag is tag:
+                    article_for_tag.append(art)
+            tags_and_articles.append([tag.name, article_for_tag])
+    else:
+        tag = session.query(Tag).filter_by(name=tagname).first()
+        if not tag:
+            session.close()
+            return None
+        articles = user.articles
+        article_for_tag = []
+        for art in articles:
+            if art.website.tag is tag:
+                article_for_tag.append(art)
+        tags_and_articles.append([tag.name, article_for_tag])
+
+    session.close()
+    return dict(tags_and_articles)

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Atom Addict</title>
+        <meta name="viewport" content="width=device-width,maximum-scale=1, user-scalable=no">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/uikit.css') }}" />
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+        <script src="{{ url_for('static', filename='js/jquery.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/uikit.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/components/grid.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/atomaddict.js') }}"></script>
+    </head>
+    <body>
+    	<nav class="uk-navbar">
+            <a href="#hamburger" class="uk-navbar-toggle uk-visible-small" data-uk-offcanvas></a>
+            <a href="#" class="uk-navbar-brand">AtomAddict</a>
+            {% block uk_navbar %}
+        	{% endblock %}	
+        </nav>
+        {% block uk_subnav %}{% endblock %}
+        {% block hamburger %}{% endblock %}
+        {% block articles %}{% endblock %}
+        {% block modal %}{% endblock %}
+        	
+    </body>
+</html>
