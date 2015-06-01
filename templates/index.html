@@ -19,8 +19,10 @@
 {% block uk_subnav %}
     <ul class="uk-subnav uk-subnav-pill uk-flex-center tags">
         <li data-uk-filter="" class="uk-active"><a href="#">All</a></li>
-		{% for tag in usertags %}
-			<li data-uk-filter={{tag.name}}><a href="#">{{tag.name}}</a></li>
+		{% for (tag, is_user_tag) in tags.items() %}
+			{% if is_user_tag %}
+				<li data-uk-filter={{tag}}><a href="#">{{ tag }}</a></li>
+			{% endif %}
 		{% endfor %}
     </ul>
 	<hr>
@@ -46,24 +48,26 @@
         <div id="no-news" class="uk-panel uk-panel-box uk-panel-box-secondary uk-width-medium-1-4 uk-container-center uk-text-center uk-hidden">
             <p>Current category has no unread items</p>
         </div>
-		{% for (article, tag) in articles_and_tags %}
-        <div class="news" data-uk-filter={{tag.name}} data-url="{{article.url}}">
-				<div class="uk-panel uk-panel-box tile">
-					<div class="uk-panel-teaser">
-						{% if article.picture%}
-						<img src={{article.picture}} alt="">
-						{% endif %}
-					</div>
-					<article class="uk-article">
-						<h2>{{article.head}}</h2>
-						<div class="uk-article-meta uk-clearfix">
-                            <a class="link-external" href={{article.url}} target="blank">Read full article</a>
-                            <time class="uk-float-right" datetime={{article.time.strftime('%Y-%m-%d %H:%M')}}>{{article.time.strftime('%d %b, %H:%M')}}</time>
+		{% for tag in tags_and_articles.keys() %}
+			{% for article in tags_and_articles[tag] %}		
+        		<div class="news" data-uk-filter={{tag}} data-url="{{article.url}}">
+					<div class="uk-panel uk-panel-box tile">
+						<div class="uk-panel-teaser">
+							{% if article.picture%}
+							<img src={{article.picture}} alt="">
+							{% endif %}
 						</div>
-                        <!--p>TODO: Some lead</p-->
-					</article>
+						<article class="uk-article">
+							<h2>{{article.head}}</h2>
+							<div class="uk-article-meta uk-clearfix">
+	                            <a class="link-external" href={{article.url}} target="blank">Read full article</a>
+                            	<time class="uk-float-right" datetime={{article.time.strftime('%Y-%m-%d %H:%M')}}>{{article.time.strftime('%d %b, %H:%M')}}</time>
+							</div>
+                        	<!--p>TODO: Some lead</p-->
+						</article>
+					</div>
 				</div>
-			</div>
+			{% endfor %}
 		{% endfor %}
 	</div>	
 {% endblock %}
@@ -104,9 +108,11 @@
                     </div>
                 </div>
             </form>
+            
+           
             <div class="uk-modal-footer uk-text-right">
                 <button type="button" class="uk-button uk-modal-close">Cancel</button>
-                <button type="button" class="uk-button uk-modal-close uk-button-primary">Save</button>
+                <button type="button" class="uk-button uk-modal-close uk-button-primary" value="asf">Save</button>
             </div>
         </div>
     </section>
@@ -114,12 +120,20 @@
     <section id="modal-subscribe" class="uk-modal">
         <div class="uk-modal-dialog">
             <div class="uk-modal-header"><h2>Choose tag</h2></div>
-			{% for tag in avaliable_tags %}
-	        <div><p>{{ tag.name }}<input type="checkbox", value="false"></p></div>
-	        {% endfor %}
-            <div class="uk-modal-footer uk-text-right">
-                <button type="button" class="uk-button uk-modal-close uk-button-primary">Save</button>
-            </div>
+            	<form id="choose-tags" method="POST" action="{{ url_for('save_tags') }}">
+					{% for (tag, bool) in tags.items() %}
+						{% if bool %} 
+			        		<div><p>{{ tag }}<input type="checkbox", name="{{ tag }}" value="True" checked></p></div>
+			        	{% else %}
+			        		<div><p>{{ tag }}<input type="checkbox", name="{{ tag }}" value="True"></p></div>
+			        	{% endif %}
+			        {% endfor %}
+			        <input type="submit">
+		            <div class="uk-modal-footer uk-text-right">
+		                <button class="uk-button uk-modal-close uk-button-primary">Save</button>
+		            </div>
+	            </form>
+   
             <div class="uk-modal-caption">Choose most interesting tags for you!</div>
         </div>
     </section>

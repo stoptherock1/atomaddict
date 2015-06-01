@@ -30,6 +30,8 @@ gadgetoftheweek',
 
     science = put.tag(name='Science')
 
+    sport = put.tag(name='Sport')
+
     a3 = put.article(head='3DConnexion SpaceNavigator',
                      url='http://content.time.com/time/business/article/0,8599,\
 1573203,00.html?utm_source=feedburner&utm_medium=feed&utm_\

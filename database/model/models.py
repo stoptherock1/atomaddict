@@ -8,10 +8,11 @@ users_tags = Table('users_tags', db.metadata,
                    Column('user_id', Integer, ForeignKey('users.id')),
                    Column('tag_id', Integer, ForeignKey('tags.id')))
 
-users_articles = Table('users_articles', db.metadata,
-                       Column('user_id', Integer, ForeignKey('users.id')),
-                       Column('article_id', Integer, ForeignKey('articles.id'))
-                       )
+users_unreaded_articles = Table('users_unreaded_articles', db.metadata,
+                                Column('user_id', Integer,
+                                       ForeignKey('users.id')),
+                                Column('article_id', Integer,
+                                       ForeignKey('articles.id')))
 
 
 class User(db.Model):
@@ -27,7 +28,7 @@ class User(db.Model):
                         lazy='dynamic')
 
     # Many to many Users <-> unviewed articles
-    articles = relationship('Article', secondary=users_articles,
+    articles = relationship('Article', secondary=users_unreaded_articles,
                             backref='users',
                             lazy='dynamic')
 
@@ -81,3 +82,4 @@ class Article(db.Model):
     def __repr__(self):
         return "<Article (head = '%s', url = '%s', date = '%s')>" % \
             (self.head, self.url, self.time)
+
