@@ -112,7 +112,7 @@ class Put():
             raise FunctionParameterError("Password is required")
         user_exist = self.session.query(User).filter_by(email=email).all()
         if not user_exist:
-            if nickname is (None or ""):
+            if not nickname or nickname is "":
                 nickname = email
             user = User(email=email, nickname=nickname,
                         password=password)

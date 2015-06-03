@@ -1,19 +1,32 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from flask import Flask, render_template, redirect, url_for, json
+from flask import Flask, render_template, redirect, url_for, json, session, g
 from database.session import Get, set_user_tags, get_user_unreaded_articles_as_dict,\
-    mark_articles_as_readed
+    mark_articles_as_readed, Add, Put
 from flask.globals import request
+from flask_login import LoginManager, login_user
+from database.model.models import User
+from forms.forms import SignupForm
+from matplotlib.backends.qt_editor import formsubplottool
 
 app = Flask(__name__)
+app.secret_key = 'temporarly secret key'
+login_manager = LoginManager()
 
 
 @app.route('/save_tags', methods=['GET', 'POST'])
 def save_tags():
-    # get default user
+
+    if 'email' not in session:
+        return redirect(url_for('sign_in'))
+    # get user
     get = Get()
-    user = get.all_users()[0]
+    user = get.user(email=session['email'])
+    if not user:
+        get.close_session()
+        return redirect(url_for('sign_in'))
+
     tags = []
     for req in request.form:
         tags.append(req)
@@ -41,18 +54,19 @@ def article_readed():
 def index():
     # TODO If user is logged in render index.html. Ladning page otherwise.
 
-    # get default user
+    if 'email' not in session:
+        return redirect(url_for('sign_in'))
+
+    # get user
     get = Get()
-    user = get.all_users()[0]
+    user = get.user(email=session['email'])
+    if not user:
+        get.close_session()
+        return redirect(url_for('sign_in'))
+
     tags_and_articles = get_user_unreaded_articles_as_dict(email=user.email)
-    get.close_session()
-
-    articles = user.articles
-    for art in articles:
-        print art
-
     tags = get.user_tags_as_dictionary(email=user.email)
-    print tags
+    get.close_session()
 
     return render_template('index.html',
                            user=user,
@@ -60,16 +74,33 @@ def index():
                            tags_and_articles=tags_and_articles)
 
 
-@app.route('/signup')
+@app.route('/signup', methods=['GET', 'POST'])
 def sign_up():
     # TODO Acutall signing up
-    return 'Sign up page'
+    form = SignupForm()
+
+    if request.method == 'POST':
+        if form.validate() is False:
+            return render_template('signup.html', form=form)
+        else:
+            put = Put()
+            user = put.user(email=form.email.data, password=form.password.data,
+                            nickname=form.nickname.data)
+            put.close_session()
+            session['email'] = user
+            return redirect(url_for('index'))
+    elif request.method == 'GET':
+        return render_template('signup.html', form=form)
 
 
-@app.route('/signin')
+@app.route('/signin', methods=['GET', 'POST'])
 def sign_in():
     # TODO Acutall signing in
-    return 'Sign in page'
+#     form = LoginForm()
+#     if form.validate_on_submit():
+#         # login and validate the user
+#         login_user
+    return render_template('signin.html')
 
 
 @app.route('/signout')
@@ -91,3 +122,13 @@ def base():
 
 if __name__ == '__main__':
     app.run(debug=True)
+    login_manager.init_app(app)
+
+
+@login_manager.user_loader
+def load_user(user_email):
+    get = Get()
+    user = get.user(email=user_email)
+    get.close_session()
+    return user
+    
