@@ -23,8 +23,34 @@ class SignupForm(Form):
 
         get = Get()
         user = get.user(email=self.email.data.lower())
+        get.close_session()
         if user:
             self.email.errors.append("that email is already taken")
             return False
         else:
             return True
+
+
+class SigninForm(Form):
+    email = TextField("Email",
+                      [validators.Required("Please enter your email address"),
+                       validators.Email("Please enter your email address")])
+    password = PasswordField('Password',
+                             [validators.Required("Please enter a password")])
+    submit = SubmitField("Sign In")
+
+    def __init__(self, *args, **kwargs):
+        Form.__init__(self, *args, **kwargs)
+
+    def validate(self):
+        if not Form.validate(self):
+            return False
+
+        get = Get()
+        user = get.user(email=self.email.data.lower())
+        get.close_session()
+        if user and user.password == self.password.data:
+            return True
+        else:
+            self.email.errors.append("Invalid email or password")
+            return False

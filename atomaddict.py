@@ -7,7 +7,7 @@ from database.session import Get, set_user_tags, get_user_unreaded_articles_as_d
 from flask.globals import request
 from flask_login import LoginManager, login_user
 from database.model.models import User
-from forms.forms import SignupForm
+from forms.forms import SignupForm, SigninForm
 from matplotlib.backends.qt_editor import formsubplottool
 
 app = Flask(__name__)
@@ -76,7 +76,6 @@ def index():
 
 @app.route('/signup', methods=['GET', 'POST'])
 def sign_up():
-    # TODO Acutall signing up
     form = SignupForm()
 
     if request.method == 'POST':
@@ -95,18 +94,26 @@ def sign_up():
 
 @app.route('/signin', methods=['GET', 'POST'])
 def sign_in():
-    # TODO Acutall signing in
-#     form = LoginForm()
-#     if form.validate_on_submit():
-#         # login and validate the user
-#         login_user
-    return render_template('signin.html')
+    form = SigninForm()
+
+    if request.method == 'POST':
+        if form.validate() is False:
+            return render_template('signin.html', form=form)
+        else:
+            session['email'] = form.email.data
+            return redirect(url_for('index'))
+
+    elif request.method == 'GET':
+        return render_template('signin.html', form=form)
 
 
 @app.route('/signout')
 def sign_out():
-    # TODO Acutall signing out
-    return redirect(url_for('index'))
+    if 'email' not in session:
+        return redirect(url_for('sign+in'))
+
+    session.pop('email', None)
+    return redirect(url_for('sign_in'))
 
 
 @app.route('/settings')
