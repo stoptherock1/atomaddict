@@ -85,40 +85,49 @@ def index():
 @app.route('/signup', methods=['GET', 'POST'])
 def sign_up():
     form = SignupForm()
+    form_in = SigninForm()
 
     if request.method == 'POST':
         if form.validate() is False:
-            return render_template('signup.html', form=form)
+            return render_template('sign.html', form_up=form,
+                                   form_in=form_in,
+                                   switch=True)
         else:
             put = Put()
-            user = put.user(email=form.email.data, password=form.password.data,
+            user = put.user(email=form.email_sign_up.data,
+                            password=form.password.data,
                             nickname=form.nickname.data)
             put.close_session()
             session['email'] = user
             return redirect(url_for('index'))
     elif request.method == 'GET':
-        return render_template('signup.html', form=form)
+        return render_template('sign.html', form_up=form, form_in=form_in,
+                               switch=True)
 
 
 @app.route('/signin', methods=['GET', 'POST'])
 def sign_in():
     form = SigninForm()
+    form_up = SignupForm()
 
     if request.method == 'POST':
         if form.validate() is False:
-            return render_template('signin.html', form=form)
+            return render_template('sign.html', form_in=form,
+                                   form_up=form_up,
+                                   switch=False)
         else:
-            session['email'] = form.email.data
+            session['email'] = form.email_sign_in.data
             return redirect(url_for('index'))
 
     elif request.method == 'GET':
-        return render_template('signin.html', form=form)
+        return render_template('sign.html', form_in=form, form_up=form_up,
+                               switch=False)
 
 
 @app.route('/signout')
 def sign_out():
     if 'email' not in session:
-        return redirect(url_for('sign+in'))
+        return redirect(url_for('sign_in'))
 
     session.pop('email', None)
     return redirect(url_for('sign_in'))
@@ -146,4 +155,3 @@ def load_user(user_email):
     user = get.user(email=user_email)
     get.close_session()
     return user
- 

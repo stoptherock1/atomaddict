@@ -5,8 +5,8 @@ from database.session import Get
 
 
 class SignupForm(Form):
-    email = TextField("Email", [validators.Required("Please enter your email.")
-                                , validators.Email("Please enter your email")])
+    email_sign_up = TextField("Email", [validators.Required("Please enter \
+        your email."), validators.Email("Please enter your email")])
 
     nickname = TextField("Nickname")
     password = PasswordField('Password', [validators.Required('Please eneter \
@@ -22,19 +22,21 @@ class SignupForm(Form):
             return False
 
         get = Get()
-        user = get.user(email=self.email.data.lower())
+        user = get.user(email=self.email_sign_up.data.lower())
         get.close_session()
         if user:
-            self.email.errors.append("that email is already taken")
+            self.email_sign_up.errors.append("that email is already taken")
             return False
         else:
             return True
 
 
 class SigninForm(Form):
-    email = TextField("Email",
-                      [validators.Required("Please enter your email address"),
-                       validators.Email("Please enter your email address")])
+    email_sign_in = TextField("Email",
+                              [validators.Required("Please enter your \
+                              email address"),
+                               validators.Email("Please enter your email \
+                               address")])
     password = PasswordField('Password',
                              [validators.Required("Please enter a password")])
     submit = SubmitField("Sign In")
@@ -47,10 +49,10 @@ class SigninForm(Form):
             return False
 
         get = Get()
-        user = get.user(email=self.email.data.lower())
+        user = get.user(email=self.email_sign_in.data.lower())
         get.close_session()
         if user and user.password == self.password.data:
             return True
         else:
-            self.email.errors.append("Invalid email or password")
+            self.email_sign_in.errors.append("Invalid email or password")
             return False

@@ -1,16 +1,24 @@
+.container-bg-image {
+	background: url('../pictures/dark-green-bg.png') repeat top left;
+	position: fixed;
+	height: 100%;
+	width: 100%;
+}
+
 .container {
 	position: fixed;
+	display: block;
 	top: 0;
 	right: 0;
 	bottom: 0;
 	left: 0;
-	background: rgba(0, 0, 0, 0.6);
-	opacity: 1;
+	background: rgba(0, 0, 0, 0.8);
+	/* opacity: 1; */
 	margin-top: 40px;
 }
 
 .container-box {
-	position: relative;
+	display: fblock;
 	-moz-box-sizing: border-box;
   	box-sizing: border-box;
   	margin: 50px auto;
@@ -21,6 +29,17 @@
  	background: #ffffff;
  	opacity: 1;
 }
+
+.container-box-sign-in {
+	position: relative;
+}
+
+.container-box-sign-up{
+	position: relative;
+	top: -327px;
+	left: 100%;
+}
+
 
 .container-box h1 {
 	font-size: 3em;
@@ -62,7 +81,9 @@ form input#password {
 	font-size: 1.1 em;
 }
 
-form input#submit {
+form input#submit,
+.btn-sign-up,
+.btn-sign-in {
 	display: block;
 	-webkit-border-radius: 3px;
 		-moz-border-radius: 3px;
@@ -81,7 +102,9 @@ form input#submit {
   	background-image: linear-gradient(top, #f4f4f4, #e5e5e5);filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr=#f4f4f4, endColorstr=#e5e5e5);
 }
 
-form input#submit:hover {
+form input#submit:hover, 
+.btn-sign-up:hover,
+.btn-sign-in:hover{
 	cursor: pointer;
 	border:1px solid #c1c1c1; 
 	background-color: #dbdbdb;
@@ -96,4 +119,12 @@ form input#submit:hover {
 
 form input#password {
 	margin-bottom: 10px;
+}
+
+/* button to sign up/sign in */
+.btn-sign-up,
+.btn-sign-in
+{
+	float: right;
+	margin-top: -40px;
 }
