@@ -2,7 +2,8 @@
 # -*- coding: utf-8 -*-
 
 from flask import Flask, render_template, redirect, url_for, json
-from database.session import Get, set_user_tags, get_user_unreaded_articles_as_dict
+from database.session import Get, set_user_tags, get_user_unreaded_articles_as_dict,\
+    mark_articles_as_readed
 from flask.globals import request
 
 app = Flask(__name__)
@@ -21,6 +22,18 @@ def save_tags():
     set_user_tags(email=user.email, tags=tags)
 
     get.close_session()
+    return redirect(url_for('index'))
+
+
+@app.route('/article_readed', methods=['GET', 'POST'])
+def article_readed():
+    article_id = request.form['article_id']
+
+    # delete article from user
+    get = Get()
+    email = get.all_users()[0].email
+    get.close_session()
+    mark_articles_as_readed(user_email=email, article_id=article_id)
     return redirect(url_for('index'))
 
 

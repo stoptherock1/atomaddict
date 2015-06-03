@@ -399,7 +399,7 @@ def set_user_tags(email, tags):
         if tag.name not in tags:
             user.tags.remove(tag)
             # remove articles
-            remove_articles_from_user(user=user, tag=tag)
+            remove_articles_from_user_after_unchecking_tag(user=user, tag=tag)
     # add last ten articles
     for name in tags:
         tag = session.query(Tag).filter_by(name=name).first()
@@ -413,8 +413,20 @@ def set_user_tags(email, tags):
     session.close()
 
 
+def mark_articles_as_readed(user_email, article_id):
+    '''If article exsist remove it from user'''
+    session = Session()
+    user = session.query(User).filter(User.email == user_email).first()
+    art = session.query(Article).filter(Article.id == article_id).first()
+    if user:
+        if art in user.articles:
+            user.articles.remove(art)
+    session.commit()
+    session.close()
+
+
 # remove articles from user
-def remove_articles_from_user(user, tag):
+def remove_articles_from_user_after_unchecking_tag(user, tag):
     '''After deleting tag it removes articles from user
     '''
     for article in user.articles:
