@@ -416,8 +416,8 @@ def set_user_tags(email, tags):
 def mark_articles_as_readed(user_email, article_id):
     '''If article exsist remove it from user'''
     session = Session()
-    user = session.query(User).filter(User.email == user_email).first()
-    art = session.query(Article).filter(Article.id == article_id).first()
+    user = session.query(User).filter_by(email=user_email).first()
+    art = session.query(Article).filter_by(id=article_id).first()
     if user:
         if art in user.articles:
             user.articles.remove(art)

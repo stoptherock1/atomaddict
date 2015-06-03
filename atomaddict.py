@@ -40,13 +40,21 @@ def save_tags():
 
 @app.route('/article_readed', methods=['GET', 'POST'])
 def article_readed():
+
+    if 'email' not in session:
+        return redirect(url_for('sign_in'))
+
     article_id = request.form['article_id']
 
     # delete article from user
     get = Get()
-    email = get.all_users()[0].email
+    user = get.user(email=session['email'])
     get.close_session()
-    mark_articles_as_readed(user_email=email, article_id=article_id)
+    if not user:
+        get.close_session()
+        return redirect(url_for('sign_in'))
+
+    mark_articles_as_readed(user_email=user.email, article_id=article_id)
     return redirect(url_for('index'))
 
 
@@ -138,4 +146,4 @@ def load_user(user_email):
     user = get.user(email=user_email)
     get.close_session()
     return user
-    
+ 
