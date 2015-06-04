@@ -425,10 +425,23 @@ def set_user_settings(user_email, settings):
 
     # update settings
     user_settings = user.settings
-    user_settings.language = settings.language
-    user_settings.tiles_size = settings.tiles_size
+    user_settings.language = settings['language']
+    user_settings.tiles_size = settings['tiles_size']
     session.commit()
     session.close()
+
+
+def get_user_settings_as_dictionary(user_email):
+    session = Session()
+    user = session.query(User).filter_by(email=user_email).first()
+    if not user:
+        session.close()
+        return None
+
+    settings = []
+    settings.append(['language', user.settings.language])
+    settings.append(['tiles_size', user.settings.tiles_size])
+    return dict(settings)
 
 
 def mark_articles_as_red(user_email, article_id):
