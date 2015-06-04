@@ -24,6 +24,9 @@
 \maketitle
 
 
+%**************************************************************************************************
+%						                       SECTION
+%**************************************************************************************************
 \section{Introduction}
 \textbf{Atomaddict} is a project, designed to simplify access to information. In the environment full of different sorts of information the fastest way to collect only information you are interested in is to have tool, which will know your needs and will automatically gather actual information for you, so you are always up-to-date in everything you are interested in.
 
@@ -35,28 +38,51 @@ The main goal of the \textbf{Atomaddict} project was to create a narrow-purpose 
 % Our new and exciting results are described in Section~\ref{results}.
 % Finally, Section~\ref{conclusions} gives the conclusions.
 
+%**************************************************************************************************
+%						                       SECTION
+%**************************************************************************************************
 \section{Project goals}\label{project goals}
 The aim of the project is to create a web application, which aggregates syndicated web content, such as online newspapers, blogs or podcasts. User will receive information and news based on his own preferences, that is, he will be able to choose topics or particular websites and subscribe to the groups of RSS and Atom feeds. 
 The second goal was creating a tool, which will be easy to use regardless of target platform or users skill in IT applications. \textbf{Atomaddict} has simple intuitive interface and customizable functionality, which is supposed to satisfy any user expectations.
 The application is useful either for new and for hard users. We have achieved it by creating two kinds of views –- simple title look-like view and more advanced table view. The principles of the User Interface are nice flexible design, which will look fine on any sort of display, and extremely narrowed functionality, which will allow user to be focused on main application features and not be bothered by useless buttons and clumsy bars.
 
+%**************************************************************************************************
+%						                       SECTION
+%**************************************************************************************************
 \section{User requirements}\label{user requirements}
+
 \begin{itemize}
+
 	\item user should be able to sign in, sign out and sign up
+
 	\item user should be able to view feeds as a table of articles; 
+
 	\item feeds should be shown depending on the category, that user have selected
+
 	\item each element of table should have title, publication date and link to the original page
+
 	\item after clicking on the element of table user should be redirected to the original page
+
 	\item user should be able to refresh feeds
+
 	\item user should be able to mark page as read
+
 	\item in `\emph{Options}' section user should be able to choose language of the page between English and Polish
+
 	\item in `\emph{Options}' section user should be able to change font size (possible sizes:  Small, Regular, Big, Mixed)
+
 	\item All interface elements should adapt (rearrange) to the display size
+
 \end{itemize}
 
+%**************************************************************************************************
+%						                       SECTION
+%**************************************************************************************************
 \section{Project management}\label{project management}
 To make work on the \textbf{Atomaddict} project efficient and multitask we used we took an advice from the project coordinator and used several additional tools as GitHub (\url{https://github.com}) and Trello (\url{https://trello.com}). Also Gantt diagram was used to plan the workflow.
 
+
+%--------------------------------------------SUBSECTION--------------------------------------------
 \subsection{GitHub}
 GitHub is a web-based Git repository hosting service, which offers all of the distributed revision control and source code management (SCM) functionality of Git as well as adding its own features. Unlike Git, which is strictly a command-line tool, GitHub provides a web-based graphical interface and desktop as well as mobile integration. It also provides access control and several collaboration features such as wikis, task management, and bug tracking and feature requests for every project.
 
@@ -64,17 +90,30 @@ GitHub offers both plans for private repositories and free accounts, which are u
 
 GitHub is mostly used for code.
 In addition to source code, GitHub supports the following formats and features:
+
+
 \begin{itemize}
+
 \item Documentation, including automatically-rendered README files in a variety of Markdown-like file formats (see README files on GitHub)
+
 \item Issue tracking (including feature requests)
+
 \item Wikis
+
 \item Small websites can be hosted from public repositories on GitHub. The URL format is \url{http://username.github.io}
+
 \item Nested task-lists within files
+
 \item Visualization of geospatial data
+
 \item Gantt charts
+
 \item 3D render files which can be previewed using a new integrated STL file viewer which displays the files on a 3D canvas. The viewer is powered by WebGL and Three.js
+
 \item Photoshop's native PSD format can be previewed and compared to previous versions of the same file.~\cite{wiki:github}
+
 \end{itemize}
+
 
 \begin{figure}[H]
     \centering
@@ -84,6 +123,7 @@ In addition to source code, GitHub supports the following formats and features:
 \end{figure}
 
 
+%--------------------------------------------SUBSECTION--------------------------------------------
 \subsection{Trello}
 Trello is a free web-based project management application originally made by Fog Creek Software in 2011, that spun out to be its own company in 2014.
 It operates a freemium business model, as well as being cross-subsidized by other Fog Creek Software products. A basic service is provided free of charge, though a Business Class paid-for service was launched in 2013.
@@ -100,34 +140,121 @@ Trello has a variety of work and personal uses including real estate management,
 \end{figure}
 
 
+%--------------------------------------------SUBSECTION--------------------------------------------
 \subsection{Gantt diagram}
 
-[IMAGE]
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{images/gantt.png}
+    \caption{\textbf{Atomaddict} project Gantt diagram}
+\end{figure}
 
+
+%--------------------------------------------SUBSECTION--------------------------------------------
 \subsection{Work breakdown structure}
 
-[IMAGE]
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{images/breakdown.png}
+    \caption{\textbf{Atomaddict} project work breakdown structure}
+\end{figure}
 
+
+
+%**************************************************************************************************
+%						                       SECTION
+%**************************************************************************************************
 \section{System diagram}
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=\textwidth]{images/systemDiagram.png}
     \caption{\textbf{Atomaddict} system}
-    \label{fig:trello}
+    \label{fig:system}
 \end{figure}
 
+
+%**************************************************************************************************
+%						                       SECTION
+%**************************************************************************************************
+\section{Use cases}
+%--------------------------------------------SUBSECTION--------------------------------------------
+\subsection{Usecase: Validate user}
+\textbf{Brief Description}\\
+This use case describes how the user signs in to the \textbf{Atomaddict} system.\\
+
+
+\textbf{Actors}\\
+
+\begin{itemize}
+
+    \item Customer
+
+    \item Atomaddict system
+
+\end{itemize}
+
+\vspace{0.5cm}
+
+
+\textbf{Preconditions}\\
+There is an active internet connection between the Customer and the Atomaddict system. There is no user signed in to the session with Atomaddict system.\\
+
+
+\textbf{Basic Flow of Events}\\
+
+\begin{enumerate}
+
+    \item User opens the projects webpage in a web browser as a not singed in user
+
+    \item User clicks on `\emph{Sign in}' button 
+
+    \item The Atomaddict website asks User to provide user's credentials: \emph{email} and \emph{password}
+
+    \item User provides user's credentials and sends data to the Atomaddict system
+
+    \item The Atomaddict system checks user's credentials and replies with successful reply telling if User is signed in
+
+    \item User gets redirected to the main page of the Atomaddict website as a signed in user
+
+\end{enumerate}
+
+\vspace{0.5cm}
+
+
+\textbf{Alternative Flows}\\
+
+\begin{itemize}
+
+    \item \textbf{Wrong email or password}: the Atomaddict informs User about wrong credentials and asks User to provide user's credentials: \emph{email} and \emph{password} again (The use case resumes at step 4)
+
+    \item \textbf{No response from the Atomaddict system}: The use case ends with a failure condition
+
+\end{itemize}
+
+\vspace{0.5cm}
+
+%**************************************************************************************************
+%						                       SECTION
+%**************************************************************************************************
 \section{Technologies used in project}
 Implementation of \textbf{Atomaddict} project was done in Python, JavaScript, HTML and CSS. Database was created with SQLite engine.
 
+%--------------------------------------------SUBSECTION--------------------------------------------
 \subsection{Celery}
 
+%--------------------------------------------SUBSECTION--------------------------------------------
 \subsection{RabbitMQ}
 
+%--------------------------------------------SUBSECTION--------------------------------------------
 \subsection{Database}
 
+%--------------------------------------------SUBSECTION--------------------------------------------
 \subsection{Front-end}
 
+%**************************************************************************************************
+%						                       SECTION
+%**************************************************************************************************
 \section{Code documentation}
 
 \bibliographystyle{abbrv}
