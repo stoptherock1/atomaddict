@@ -44,29 +44,36 @@
 {% endblock %}
 
 {% block articles %}
+
+
     <div id="news-list" data-uk-grid="{controls: 'ul.tags', gutter: 10}">
         <div id="no-news" class="uk-panel uk-panel-box uk-panel-box-secondary uk-width-medium-1-4 uk-container-center uk-text-center uk-hidden">
             <p>Current category has no unread items</p>
         </div>
 		{% for tag in tags_and_articles.keys() %}
-			{% for article in tags_and_articles[tag] %}		
+			{% for article in tags_and_articles[tag] %}	
         		<div class="news" data-uk-filter={{tag}} data-url="{{article.url}}">
-					<div class="uk-panel uk-panel-box tile">
-						<div class="uk-panel-teaser">
-							{% if article.picture%}
-							<img src={{article.picture}} alt="">
-							{% endif %}
-						</div>
-						<article class="uk-article">
-							<h2>{{article.head}}</h2>
-							<div class="uk-article-meta uk-clearfix">
-	                            <a class="link-external" href={{article.url}} target="blank">Read full article</a>
-                            	<time class="uk-float-right" datetime={{article.time.strftime('%Y-%m-%d %H:%M')}}>{{article.time.strftime('%d %b, %H:%M')}}</time>
+        			<form id="mark-article" method="POST" action="{{ url_for('article_readed') }}">
+						<div class="uk-panel uk-panel-box tile">
+							<div class="uk-panel-teaser">
+								{% if article.picture%}
+								<img src={{article.picture}} alt="">
+								{% endif %}
 							</div>
-                        	<!--p>TODO: Some lead</p-->
-						</article>
-					</div>
+							<article class="uk-article">
+								<h2>{{article.head}}</h2>
+								<div class="uk-article-meta uk-clearfix">
+		                            <a class="link-external" href={{article.url}} target="blank">Read full article</a>
+	                            	<time class="uk-float-right" datetime={{article.time.strftime('%Y-%m-%d %H:%M')}}>{{article.time.strftime('%d %b, %H:%M')}}</time>
+								</div>
+	                        	<!--p>TODO: Some lead</p-->
+							</article>
+						</div>
+						<input type="text" name="article_id" value="{{article.id}}" hidden="True">
+						<input type="submit">
+					</form>
 				</div>
+			
 			{% endfor %}
 		{% endfor %}
 	</div>	
