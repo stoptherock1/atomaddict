@@ -1,6 +1,6 @@
 from database.model import db
 from sqlalchemy.orm import sessionmaker
-from database.model.models import User, Tag, Website, Article
+from database.model.models import User, Tag, Website, Article, Settings
 from datetime import datetime
 
 Session = sessionmaker(bind=db.engine)
@@ -112,10 +112,12 @@ class Put():
             raise FunctionParameterError("Password is required")
         user_exist = self.session.query(User).filter_by(email=email).all()
         if not user_exist:
-            if nickname is (None or ""):
+            if not nickname or nickname is "":
                 nickname = email
             user = User(email=email, nickname=nickname,
                         password=password)
+            settings = Settings(language='English', tiles_size='Mixed')
+            user.settings = settings
             self.session.add(user)
             self.session.commit()
             print "User added with success"
@@ -320,11 +322,11 @@ class Add():
                 return
         website_exists.articles.append(article_exists)
         print 'article added to website'
-        #dodanie nowych artykulow uzytkwnikom
+        # dodanie nowych artykulow uzytkwnikom
         if website_exists.tag:
             tag = website_exists.tag
             for user in tag.users:
-                user.articles.append(article)
+                user.articles.append(article_exists)
         self.session.commit()
 
 
@@ -399,7 +401,7 @@ def set_user_tags(email, tags):
         if tag.name not in tags:
             user.tags.remove(tag)
             # remove articles
-            remove_articles_from_user(user=user, tag=tag)
+            remove_articles_from_user_after_unchecking_tag(user=user, tag=tag)
     # add last ten articles
     for name in tags:
         tag = session.query(Tag).filter_by(name=name).first()
@@ -413,8 +415,49 @@ def set_user_tags(email, tags):
     session.close()
 
 
+# when user choose settings
+def set_user_settings(user_email, settings):
+    session = Session()
+    user = session.query(User).filter_by(email=user_email).first()
+    if not user:
+        session.close()
+        return None
+
+    # update settings
+    user_settings = user.settings
+    user_settings.language = settings['language']
+    user_settings.tiles_size = settings['tiles_size']
+    session.commit()
+    session.close()
+
+
+def get_user_settings_as_dictionary(user_email):
+    session = Session()
+    user = session.query(User).filter_by(email=user_email).first()
+    if not user:
+        session.close()
+        return None
+
+    settings = []
+    settings.append(['language', user.settings.language])
+    settings.append(['tiles_size', user.settings.tiles_size])
+    return dict(settings)
+
+
+def mark_articles_as_red(user_email, article_id):
+    '''If article exsist remove it from user'''
+    session = Session()
+    user = session.query(User).filter_by(email=user_email).first()
+    art = session.query(Article).filter_by(id=article_id).first()
+    if user:
+        if art in user.articles:
+            user.articles.remove(art)
+    session.commit()
+    session.close()
+
+
 # remove articles from user
-def remove_articles_from_user(user, tag):
+def remove_articles_from_user_after_unchecking_tag(user, tag):
     '''After deleting tag it removes articles from user
     '''
     for article in user.articles:

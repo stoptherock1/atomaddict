@@ -1,0 +1,82 @@
+<!-- extends from base layout -->
+{% extends "base.html" %}
+
+{% block content %}
+	<div class="container-bg-image">
+		<div class="container">
+	        <div class="container-box container-box-sign-in">
+	        <!--  SIGN IN -->
+				<h1>Sign In</h1>
+		
+				{% for message in form_in.email_sign_in.errors %}
+					<div class="flash">{{ message }}</div>
+				{% endfor %}
+		
+				{% for message in form_in.password.errors %}
+					<div class="flash">{{ message }}</div>
+				{% endfor %}
+		
+				<form action="{{ url_for('sign_in') }}" method='POST'>
+					{{ form_in.hidden_tag() }}
+				
+					{{ form_in.email_sign_in.label }}
+					{{ form_in.email_sign_in }}
+			
+					{{ form_in.password.label }}
+					{{ form_in.password }}
+			
+					{{ form_in.submit }}
+				</form>
+				<div class="uk-button btn-sign-up">Sign Up <span class="uk-icon-long-arrow-right"></span></div>
+		
+			</div>
+			
+			<div class="container-box container-box-sign-up">
+			<!--  SIGN UP -->
+				<h1>Sign Up</h1>
+		
+				{% for message in form_up.email_sign_up.errors %}
+					<div class="flash">{{ message }}</div>
+				{% endfor %}
+		
+				{% for message in form_up.password.errors %}
+					<div class="flash">{{ message }}</div>
+				{% endfor %}
+	
+				<form action="{{ url_for('sign_up') }}" method='POST'>
+					{{ form_up.hidden_tag() }}
+				
+					{{ form_up.email_sign_up.label }}
+					{{ form_up.email_sign_up }}
+			
+					{{ form_up.nickname.label }}
+					{{ form_up.nickname }}
+			
+					{{ form_up.password.label }}
+					{{ form_up.password }}
+			
+					{{ form_up.submit }}
+				</form>
+				<div class="uk-button btn-sign-in">Sign In <span class="uk-icon-long-arrow-left"></span></div>
+	
+			</div>
+		</div>
+	</div>
+	
+	{% if switch %}
+		<script>
+			$('.container-box-sign-in').animate({
+				left: "-100%"
+			});
+			$('.container-box-sign-up').animate({
+				left: "0%"
+			});
+		</script>
+	{% endif %}
+	
+	
+	
+	<script src="{{ url_for('static', filename='js/sign.js') }}"></script>
+	
+	
+{% endblock %}

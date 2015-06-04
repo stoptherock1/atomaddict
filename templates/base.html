@@ -5,6 +5,7 @@
         <meta name="viewport" content="width=device-width,maximum-scale=1, user-scalable=no">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/uikit.css') }}" />
         <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/form.css') }}" />
         <script src="{{ url_for('static', filename='js/jquery.js') }}"></script>
         <script src="{{ url_for('static', filename='js/uikit.js') }}"></script>
         <script src="{{ url_for('static', filename='js/components/grid.js') }}"></script>
@@ -17,6 +18,9 @@
             {% block uk_navbar %}
         	{% endblock %}	
         </nav>
+        
+        		{% block content %}{% endblock %}
+        	
         {% block uk_subnav %}{% endblock %}
         {% block hamburger %}{% endblock %}
         {% block articles %}{% endblock %}
