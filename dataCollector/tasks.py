@@ -3,8 +3,10 @@ from celery import Celery
 import feedparser
 
 #===============================================================================
-# ps: rabbitmq-server -detached
-# ps: celery -A tasks.celery worker --loglevel=info     // ctrl+c
+# On windows go to the rabitmq-server/sbin and start rabbitmq-server.bat
+# 1.: rabbitmq-server -detached
+# Go to the dataCollector package in attomReader
+# 2.: python -m celery -A tasks.celery worker --loglevel=info     // ctrl+c
 #
 # 3. rabbitmqctl stop
 # rabbitmqctl status

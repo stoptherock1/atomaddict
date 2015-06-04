@@ -324,7 +324,7 @@ class Add():
         if website_exists.tag:
             tag = website_exists.tag
             for user in tag.users:
-                user.articles.append(article)
+                user.articles.append(article_exists)
         self.session.commit()
 
 
