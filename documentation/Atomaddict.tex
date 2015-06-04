@@ -14,9 +14,18 @@
 \documentclass[12pt]{article}
 
 \usepackage{hyperref}
+% \hypersetup{urlcolor=blue, colorlinks=true}
+
 \usepackage{indentfirst}
 \usepackage{graphicx}
 \usepackage{float}
+
+\newcommand{\lcolumn}{0.3\textwidth}
+\newcommand{\rcolumn}{0.6\textwidth}
+\usepackage{array}
+\newcolumntype{L}[1]{>{\raggedright\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+\newcolumntype{C}[1]{>{\centering\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+\newcolumntype{R}[1]{>{\raggedleft\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
 
 
 
@@ -181,14 +190,14 @@ Trello has a variety of work and personal uses including real estate management,
 %--------------------------------------------SUBSECTION--------------------------------------------
 \subsection{Usecase: Validate user}
 \textbf{Brief Description}\\
-This use case describes how the user signs in to the \textbf{Atomaddict} system.\\
+This use case describes how User signs in to the \textbf{Atomaddict} system.\\
 
 
-\textbf{Actors}\\
+\textbf{Actors}
 
 \begin{itemize}
 
-    \item Customer
+    \item User
 
     \item Atomaddict system
 
@@ -198,10 +207,10 @@ This use case describes how the user signs in to the \textbf{Atomaddict} system.
 
 
 \textbf{Preconditions}\\
-There is an active internet connection between the Customer and the Atomaddict system. There is no user signed in to the session with Atomaddict system.\\
+There is an active internet connection between User and the Atomaddict system. There is no user signed in to the session with Atomaddict system.\\
 
 
-\textbf{Basic Flow of Events}\\
+\textbf{Basic Flow of Events}
 
 \begin{enumerate}
 
@@ -217,18 +226,73 @@ There is an active internet connection between the Customer and the Atomaddict s
 
     \item User gets redirected to the main page of the Atomaddict website as a signed in user
 
+    \item The Atomaddict website shows User unread feeds from users subscriptions list
+
 \end{enumerate}
 
 \vspace{0.5cm}
 
 
-\textbf{Alternative Flows}\\
+\textbf{Alternative Flows}
 
 \begin{itemize}
 
     \item \textbf{Wrong email or password}: the Atomaddict informs User about wrong credentials and asks User to provide user's credentials: \emph{email} and \emph{password} again (The use case resumes at step 4)
 
-    \item \textbf{No response from the Atomaddict system}: The use case ends with a failure condition
+    \item \textbf{No response from the Atomaddict system}: the use case ends with a failure condition.
+
+\end{itemize}
+
+\vspace{0.5cm}
+
+
+%--------------------------------------------SUBSECTION--------------------------------------------
+\subsection{Usecase: User checks specific feed}
+\textbf{Brief Description}\\
+This use case describes how user checks specific article, found on the \textbf{Atomaddict} website.\\
+
+
+\textbf{Actors}
+
+\begin{itemize}
+
+    \item User
+
+    \item Atomaddict system
+
+\end{itemize}
+
+\vspace{0.5cm}
+
+
+\textbf{Preconditions}\\
+There is an active internet connection between User and the Atomaddict system. There is no user signed in to the session with Atomaddict system.\\
+
+
+\textbf{Basic Flow of Events}
+
+\begin{enumerate}
+
+    \item \textbf{Use case `Validate user'} is performed
+
+    \item User clicks on on specific category
+
+    \item The Atomaddict website shows User the list of unread feeds from the chosen category
+
+    \item User clicks on the specific feed
+
+    \item User gets redirected to the webpage with the original article
+
+\end{enumerate}
+
+\vspace{0.5cm}
+
+
+\textbf{Alternative Flows}
+
+\begin{itemize}
+
+    \item \textbf{Use case `Validate user'} performance fails: the use case ends with a failure condition.
 
 \end{itemize}
 
@@ -242,9 +306,40 @@ Implementation of \textbf{Atomaddict} project was done in Python, JavaScript, HT
 
 %--------------------------------------------SUBSECTION--------------------------------------------
 \subsection{Celery}
+Celery is an open source asynchronous task queue/job queue based on distributed message passing. It is focused on real-time operation, but supports scheduling as well.
+
+The execution units, called tasks, are executed concurrently on one or more worker nodes using multiprocessing, Eventlet or gevent. Tasks can execute asynchronously (in the background) or synchronously (wait until ready). Celery is used in production systems to process millions of tasks every hour.
+
+Celery is written in Python, but the protocol can be implemented in any language. It can also operate with other languages using webhooks. There is also RCelery for the Ruby programming language, and a PHP client.
+The recommended message broker is RabbitMQ, but support for Redis, MongoDB, Beanstalk, Amazon SQS, CouchDB, IronMQ and databases (using SQLAlchemy or the Django ORM) is also available.~\cite{wiki:celery}
 
 %--------------------------------------------SUBSECTION--------------------------------------------
 \subsection{RabbitMQ}
+RabbitMQ is open source message broker software (sometimes called message-oriented middleware) that implements the Advanced Message Queuing Protocol (AMQP). The RabbitMQ server is written in the Erlang programming language and is built on the Open Telecom Platform framework for clustering and failover. Client libraries to interface with the broker are available for all major programming languages.
+
+Rabbit Technologies Ltd., develops and provides support for RabbitMQ. Rabbit Technologies started as a joint venture between LShift and CohesiveFT in 2007, and was acquired in April 2010 by SpringSource, a division of VMware. The project became part of GoPivotal in May 2013.
+
+The source code is released under the Mozilla Public License. The project consists of:
+\begin{itemize}
+    
+    \item The RabbitMQ exchange server itself
+
+    \item Gateways for HTTP, Streaming Text Oriented Messaging Protocol (STOMP), and MQTT protocols
+
+    \item  AMQP client libraries for Java, .NET Framework, and Erlang. (AMQP clients for other languages are available from other vendors.)
+
+    \item A plug-in platform for custom additions, with a pre-defined collection of supported plug-ins, including:
+
+        \begin{itemize}
+        
+            \item A `Shovel' plug-in that takes care of moving or copying (replicating) messages from one broker to another.
+
+            \item A `Federation' plug-in that enables efficient sharing of messages between brokers (at the exchange level).
+
+            \item A `Management' plug-in that enables monitoring and control of brokers and clusters of brokers.~\cite{wiki:rabbitmq}
+
+        \end{itemize}
+\end{itemize}
 
 %--------------------------------------------SUBSECTION--------------------------------------------
 \subsection{Database}
@@ -256,6 +351,81 @@ Implementation of \textbf{Atomaddict} project was done in Python, JavaScript, HT
 %                                              SECTION
 %**************************************************************************************************
 \section{Code documentation}
+
+
+%--------------------------------------------SUBSECTION--------------------------------------------
+\subsection{fetchDataByTag}
+Description: function checks all data sources (websites), associated with the given tag (category) and creates a new task for the Celery worker to parse feeds from found data sources. The created task is passed to the Celery worker with RabbitMQ message. After receiving the answer function inserts the results into the database.
+
+\begin{center}
+  \begin{tabular}{|L{\lcolumn}|L{\rcolumn}|}
+    \hline
+    
+    \textbf{Functions name}  & \textit{
+        fetchDataByTag
+        } \\ \hline
+        
+    \textbf{Source file} & \textit{
+        dataCollector.py
+        } \\ \hline
+        
+    \textbf{Input parameters}  & 
+        \begin{itemize}
+            \vspace{-9mm} \setlength{\itemsep}{0pt} \setlength{\parskip}{0pt} \setlength{\parsep}{0pt}
+            \item {\textit{tagName} -- name of the chosen category}
+            \vspace{-\baselineskip}
+        \end{itemize}
+        \\ \hline
+        
+    \textbf{Return value} &
+        --
+        \\ \hline
+        
+  \end{tabular}
+\end{center}
+\vspace{0.5cm}
+
+
+%--------------------------------------------SUBSECTION--------------------------------------------
+\subsection{downloadFeeds}
+Description: function actually is a Celery task. It receives the data source url, parses it and returns the `\emph{data}' object, filled with the parsing results.
+
+\begin{center}
+  \begin{tabular}{|L{\lcolumn}|L{\rcolumn}|}
+    \hline
+    
+    \textbf{Functions name}  & \textit{
+        downloadFeeds
+        } \\ \hline
+        
+    \textbf{Source file} & \textit{
+        tasks.py
+        } \\ \hline
+        
+    \textbf{Input parameters}  & 
+        \begin{itemize}
+            \vspace{-9mm} \setlength{\itemsep}{0pt} \setlength{\parskip}{0pt} \setlength{\parsep}{0pt}
+            \item {\textit{pageUrl} -- url of data source}
+            \vspace{-\baselineskip}
+        \end{itemize}
+        \\ \hline
+        
+    \textbf{Return value} &
+        \begin{itemize}
+            \vspace{-9mm} \setlength{\itemsep}{0pt} \setlength{\parskip}{0pt} \setlength{\parsep}{0pt}
+            \item \emph{pageUrl} -- url of data source
+            \item \emph{data} -- object filled with parsing results
+            \vspace{-\baselineskip}
+        \end{itemize}
+        
+        \\ \hline
+        
+  \end{tabular}
+\end{center}
+\vspace{0.5cm}
+
+\newpage
+\tableofcontents
 
 \bibliographystyle{abbrv}
 \bibliography{references}
