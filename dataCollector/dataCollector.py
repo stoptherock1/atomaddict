@@ -35,8 +35,21 @@ def fetchDataByTag(tagName):
         pageUrl, data = parsedPage.get()
 
         for entry in data.entries:
-            time = parser.parse(entry.published)
-            put.article(head=entry.title, url=entry.link, time=time)
+            if 'published' in entry:
+                time = parser.parse(entry.published)
+            else:
+                time = None
+            title = entry.get('title', 'No Title')
+            link = None
+            picture = None
+            if 'links' in entry:
+                links = entry.links
+                if links.__len__() >= 1:
+                    link = links[0].href
+                if links.__len__() >= 2:
+                    picture = links[1].href
+
+            put.article(head=title, url=link, time=time, picture=picture)
             add.article_to_website(website_url=pageUrl, article_url=entry.link)
 
     get.close_session()
@@ -50,15 +63,15 @@ if __name__ == "__main__":
     get = database.session.Get()
 
     # clearDb()
-    database.session.addUrlsAndTagsToDb()
+#     database.session.addUrlsAndTagsToDb()
 
-    fetchDataByTag('News')
-    # fetchDataByTag('all')
+#     fetchDataByTag('News')
+    fetchDataByTag('all')
 
-    articles = get.all_articles()
-
-    print(len(articles))
-    print(articles)
+#     articles = get.all_articles()
+#
+#     print(len(articles))
+#     print(articles)
 
     get.close_session()
 
