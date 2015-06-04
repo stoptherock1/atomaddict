@@ -19,8 +19,9 @@
 \usepackage{float}
 \usepackage[table]{xcolor}
 \usepackage{dcolumn,multirow,longtable}
+\usepackage{amssymb}
 
-
+\newpage
 
 \begin{document}
 \maketitle
@@ -310,7 +311,18 @@ To store necessary information for \textbf{Attomaddict} was used SQLite database
 	\caption{Table Details}
 	\label{tab:tableDetails}
 \end{table}
+
+
+\subsubsection{Implementation}
+
+\includegraphics{images/sqla.png}
+
+Database was made in python using SQLAlchemy. SQLAlchemy is the Python SQL toolkit and Object Relational Mapper that gives application developers the full power and flexibility of SQL. It provides a full suite of well known enterprise-level persistence patterns, designed for efficient and high-performing database access, adapted into a simple and Pythonic domain language.
+
+
 %--------------------------------------------SUBSECTION--------------------------------------------
+
+
 \subsection{Front-end}
 
 %**************************************************************************************************
@@ -318,8 +330,84 @@ To store necessary information for \textbf{Attomaddict} was used SQLite database
 %**************************************************************************************************
 \section{Code documentation}
 
-\bibliographystyle{abbrv}
-\bibliography{references}
+\subsection{Database package}
+
+Database package is used for management database. It consists of different modules.
+
+\begin{itemize}
+	\item \texttt{model.models.py}
+	\begin{itemize}
+		\item \textbf{description:} The data that is stored in the database is represented by a collection of classes. The ORM layer is doing translations required to map objects created from these classes into rows in the proper database table. The \texttt{\_\_init\_\_.py} file in package \texttt{model} connects database into flask application.
+		
+		\item \textbf{classes:} User, Settings, Tag, Website, Article.
+	\end{itemize}
+		
+	\item \texttt{db\_repository} package 
+	\begin{itemize}
+		\item \textbf{description:} Following versions of database model are stored in that file providing easy access to them.
+	\end{itemize}
+	
+	\item \texttt{db\_create.py}
+	\begin{itemize}
+		\item \textbf{description:} Module used to create database. Type and location of the database are stored in \texttt{config.py} in that package.
+	\end{itemize}
+	
+	\item \texttt{db\_migrate.py}
+	\begin{itemize}
+		\item \textbf{description:} Any changes to the database model can be incorporate into the database by executing this module. 
+	\end{itemize}
+	
+	\item \texttt{db\_upgrade.py}
+	\begin{itemize}
+		\item \textbf{description:} This script allows the database to be upgraded to the latest revision, by applying the migration script stored in the database repository.
+	\end{itemize}
+		
+	\item \texttt{db\_downgrade.py}
+	\begin{itemize}
+		\item \textbf{description:} This script allows the database to be downgraded one revision.
+	\end{itemize}
+		
+	\item \texttt{session.py}
+	\begin{itemize}
+		\item \textbf{description:} Changes to a database are done in the context of a session. It allows easy access to database resources, it is adding, deleting, or changing records.
+		\item \textbf{classes:} 
+			\begin{itemize}
+				\item \texttt{Put} - adding resources to the database
+				\item \texttt{Get} - getting resources from the database 
+				\item \texttt{Delete} - deleting resources from the database
+				\item \texttt{Add} - connecting relationships between tables - e.g. adding tag to user
+			\end{itemize}
+		\item \textbf{methods:} They provide methods for changing user's settings or list of tags. They allow to get tags, articles or settings as a dictionary for easy use in html files. \\
+		Example methods:
+		\begin{itemize}
+			\item \texttt{def get\_user\_settings\_as\_dictionary(user\_email)} \\
+			Method is used to get user settings in a dictionary form, it is \{'key' : 'value', ... \}. \\
+			\textbf{input parameters:} \texttt{user\_email} -- user's email, whose settings will be returned \\
+			\textbf{return value:} settings as a dictionary
+			
+			\item \texttt{set\_user\_tags(email, tags)} \\
+			Method add checked and remove unchecked tags in the website to the user. \\
+			\textbf{input parameters:} \texttt{email} -- user's email to whom tags will be added or removed. \\
+									   \texttt{tags} -- list of checked tags
+			
+		\end{itemize}
+	\end{itemize}
+			
+	\item \texttt{}
+	\begin{itemize}
+		\item \textbf{description:}
+		\item \textbf{classes:} 
+		\item \textbf{methods:}
+	\end{itemize}
+
+	\item \texttt{}
+	\begin{itemize}
+		\item \textbf{description:}
+		\item \textbf{classes:} 
+		\item \textbf{methods:}
+	\end{itemize}
+\end{itemize}
+
 
 \end{document}
 This is never printed
