@@ -3,12 +3,10 @@
 
 from flask import Flask, render_template, redirect, url_for, json, session, g
 from database.session import Get, set_user_tags, get_user_unreaded_articles_as_dict,\
-    mark_articles_as_readed, Add, Put
+    mark_articles_as_red, Put
 from flask.globals import request
-from flask_login import LoginManager, login_user
-from database.model.models import User
+from flask_login import LoginManager
 from forms.forms import SignupForm, SigninForm
-from matplotlib.backends.qt_editor import formsubplottool
 
 app = Flask(__name__)
 app.secret_key = 'temporarly secret key'
@@ -54,7 +52,7 @@ def article_readed():
         get.close_session()
         return redirect(url_for('sign_in'))
 
-    mark_articles_as_readed(user_email=user.email, article_id=article_id)
+    mark_articles_as_red(user_email=user.email, article_id=article_id)
     return redirect(url_for('index'))
 
 
