@@ -8,7 +8,6 @@ from flask.globals import request
 from flask_login import LoginManager, login_user
 from database.model.models import User
 from forms.forms import SignupForm, SigninForm
-from matplotlib.backends.qt_editor import formsubplottool
 
 app = Flask(__name__)
 app.secret_key = 'temporarly secret key'
