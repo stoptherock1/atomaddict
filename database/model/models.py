@@ -91,7 +91,15 @@ class Article(db.Model):
     # Many to One: articles -> website
     website_id = Column(Integer, ForeignKey('websites.id'))
 
+    def jsonify(self):
+        return {
+            'id': self.id,
+            'head': self.head,
+            'url': self.url,
+            'picture': self.picture or '',
+            'time': self.time.strftime('%Y-%m-%d %H:%M')
+        }
+
     def __repr__(self):
         return "<Article (head = '%s', url = '%s', date = '%s')>" % \
             (self.head, self.url, self.time)
-

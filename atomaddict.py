@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from flask import Flask, render_template, redirect, url_for, json, session, g
+from flask import Flask, render_template, redirect, url_for, jsonify, session, g
 from database.session import Get, set_user_tags, get_user_unreaded_articles_as_dict,\
     mark_articles_as_red, Put
 from flask.globals import request
@@ -33,7 +33,7 @@ def save_tags():
     set_user_tags(email=user.email, tags=tags)
 
     get.close_session()
-    return redirect(url_for('index'))
+    return 'ok', 200
 
 
 @app.route('/article_readed', methods=['GET', 'POST'])
@@ -41,8 +41,6 @@ def article_readed():
 
     if 'email' not in session:
         return redirect(url_for('sign_in'))
-
-    article_id = request.form['article_id']
 
     # delete article from user
     get = Get()
@@ -52,14 +50,31 @@ def article_readed():
         get.close_session()
         return redirect(url_for('sign_in'))
 
+    article_id = int(request.form['article_id'])
     mark_articles_as_red(user_email=user.email, article_id=article_id)
-    return redirect(url_for('index'))
+    return 'ok', 200
+
+
+@app.route('/fetch_articles')
+def fetch_articles():
+    if 'email' not in session:
+        return redirect(url_for('sign_in'))
+
+    # get user
+    get = Get()
+    user = get.user(email=session['email'])
+    if not user:
+        get.close_session()
+        return redirect(url_for('sign_in'))
+
+    tags_and_articles = get_user_unreaded_articles_as_dict(email=user.email)
+    for tag, articles in tags_and_articles.iteritems():
+        tags_and_articles[tag] = map(lambda a: a.jsonify(), articles)
+    return jsonify(**tags_and_articles)
 
 
 @app.route('/')
 def index():
-    # TODO If user is logged in render index.html. Ladning page otherwise.
-
     if 'email' not in session:
         return redirect(url_for('sign_in'))
 
