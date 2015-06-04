@@ -17,6 +17,8 @@
 \usepackage{indentfirst}
 \usepackage{graphicx}
 \usepackage{float}
+\usepackage[table]{xcolor}
+\usepackage{dcolumn,multirow,longtable}
 
 
 
@@ -79,7 +81,7 @@ The application is useful either for new and for hard users. We have achieved it
 %                                              SECTION
 %**************************************************************************************************
 \section{Project management}\label{project management}
-To make work on the \textbf{Atomaddict} project efficient and multitask we used we took an advice from the project coordinator and used several additional tools as GitHub (\url{https://github.com}) and Trello (\url{https://trello.com}). Also Gantt diagram was used to plan the workflow.
+To make work on the \textbf{Atomaddict} project efficient and multitask we took an advice from the project coordinator and used several additional tools as GitHub (\url{https://github.com}) and Trello (\url{https://trello.com}). Also Gantt diagram was used to plan the workflow.
 
 
 %--------------------------------------------SUBSECTION--------------------------------------------
@@ -249,6 +251,65 @@ Implementation of \textbf{Atomaddict} project was done in Python, JavaScript, HT
 %--------------------------------------------SUBSECTION--------------------------------------------
 \subsection{Database}
 
+\includegraphics{images/sqlite.png} \\
+
+To store necessary information for \textbf{Attomaddict} was used SQLite database. The figure \ref{fig:databaseModel} provides a visual overview of the AttomAddict database and the realtions beetwen the tables. Table \ref{tab:tablesOverwiew} and \ref{tab:tableDetails} include additional details on the tables and columns.
+
+\begin{figure}[H]
+	\includegraphics[width=\textwidth]{images/atomAddictDataBase.png}
+	\caption{Database model}
+	\label{fig:databaseModel}
+\end{figure}
+
+\subsubsection{Table Overview}
+
+\begin{table}[H]
+\centering
+	\begin{tabular}{p{5cm}p{9cm}}  \hline
+	\rowcolor{blue!20!black!30!green}\multicolumn{2}{|c|}{\textbf{AttomAddict Tables Overwiew}} \\ \hline \hline
+	User 	  & 		Basic users data						 		\\ \hline
+	Settings  & 		User configuration settings 				\\ \hline
+	Tag 	  &  		Tags representing available topics of interest for subscription	\\ \hline
+	Website   & 		Websites providing RSS data										 \\ \hline
+	Article	  & 		Articles parsed from websites 									\\ \hline
+
+	\end{tabular}
+	\caption{Tables overwiew}
+	\label{tab:tablesOverwiew}
+\end{table}
+
+\subsubsection{Table Details}
+
+\begin{table}[H]
+\centering
+	\begin{tabular}{|p{3cm}|p{3cm}||p{7cm}|} \hline
+		\rowcolor{red!20!yellow!30!orange} \multicolumn{3}{|c|}{\textbf{AttomAddict Table Details}} \\ \hline \hline
+		\multirow{5}{*}{\textbf{User}} 	 
+								&	email	 	& 		email used to log into application		 \\ \cline{2-3}
+								&	nickname	& 		optional user nickname						 \\ \cline{2-3}
+								&	password	& 		password used to log into application		\\	\cline{2-3}
+								& 	tags		&		tags assigned to particular user			\\ 	\cline{2-3}
+								&	articles	&		unread articles by user						\\ 	\hline
+		\multirow{2}{*}{\textbf{Settings}}
+								&	language	&		user's preferable language					\\	\cline{2-3}
+								&	tiles size	&		size of user's tiles						\\	\hline
+		\multirow{2}{*}{\textbf{Tag}}
+								&	name		&		unique tag name								\\ \cline{2-3}
+								&	users		&		users assigned to particular tag			\\ \hline
+		\multirow{2}{*}{\textbf{Website}}
+								&	url			&		unique url definig werbsite					\\	\cline{2-3}
+								&	name		&		short description of website				\\ 	\hline
+		\multirow{5}{*}{\textbf{Article}}
+								&	haed		&		Content of an article						\\	\cline{2-3}
+								&	url			&		address of an article						\\	\cline{2-3}
+								&	picture		&		url of picture if it is available			\\	\cline{2-3}
+								&	time		&		time of publication							\\	\cline{2-3}
+								&	users		&		users which didn't read this article from the website from the tag which they are subscribing 			\\ \hline
+
+	\end{tabular}
+	\caption{Table Details}
+	\label{tab:tableDetails}
+\end{table}
 %--------------------------------------------SUBSECTION--------------------------------------------
 \subsection{Front-end}
 
