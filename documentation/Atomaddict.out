@@ -9,13 +9,16 @@
 \BOOKMARK [1][-]{section.5}{System diagram}{}% 9
 \BOOKMARK [1][-]{section.6}{Use cases}{}% 10
 \BOOKMARK [2][-]{subsection.6.1}{Usecase: Validate user}{section.6}% 11
-\BOOKMARK [1][-]{section.7}{Technologies used in project}{}% 12
-\BOOKMARK [2][-]{subsection.7.1}{Celery}{section.7}% 13
-\BOOKMARK [2][-]{subsection.7.2}{RabbitMQ}{section.7}% 14
-\BOOKMARK [2][-]{subsection.7.3}{Database}{section.7}% 15
-\BOOKMARK [3][-]{subsubsection.7.3.1}{Table Overview}{subsection.7.3}% 16
-\BOOKMARK [3][-]{subsubsection.7.3.2}{Table Details}{subsection.7.3}% 17
-\BOOKMARK [3][-]{subsubsection.7.3.3}{Implementation}{subsection.7.3}% 18
-\BOOKMARK [2][-]{subsection.7.4}{Front-end}{section.7}% 19
-\BOOKMARK [1][-]{section.8}{Code documentation}{}% 20
-\BOOKMARK [2][-]{subsection.8.1}{Database package}{section.8}% 21
+\BOOKMARK [2][-]{subsection.6.2}{Usecase: User checks specific feed}{section.6}% 12
+\BOOKMARK [1][-]{section.7}{Technologies used in project}{}% 13
+\BOOKMARK [2][-]{subsection.7.1}{Celery}{section.7}% 14
+\BOOKMARK [2][-]{subsection.7.2}{RabbitMQ}{section.7}% 15
+\BOOKMARK [2][-]{subsection.7.3}{Database}{section.7}% 16
+\BOOKMARK [3][-]{subsubsection.7.3.1}{Table Overview}{subsection.7.3}% 17
+\BOOKMARK [3][-]{subsubsection.7.3.2}{Table Details}{subsection.7.3}% 18
+\BOOKMARK [3][-]{subsubsection.7.3.3}{Implementation}{subsection.7.3}% 19
+\BOOKMARK [2][-]{subsection.7.4}{Front-end}{section.7}% 20
+\BOOKMARK [1][-]{section.8}{Code documentation}{}% 21
+\BOOKMARK [2][-]{subsection.8.1}{fetchDataByTag}{section.8}% 22
+\BOOKMARK [2][-]{subsection.8.2}{downloadFeeds}{section.8}% 23
+\BOOKMARK [2][-]{subsection.8.3}{Database package}{section.8}% 24
