@@ -17,11 +17,15 @@ $(function () {
                 $.getJSON('/fetch_articles', function (data) {
                     var presentArticles = $.map($('.news input[name="article_id"]'), function (value, index) {
                         return parseInt($(value).val(), 10);
-                    });
+                    }),
+                        $template = $("#newsTempl"),
+                        fetchedNews;
+
                     $.each(data, function (tag, articles) {
-                        $.each(articles, function (i, article) {
+                        $.each(articles, function (i, article) {                            
                             if (presentArticles.indexOf(article.id) < 0) {
-                                console.log('new article', article.id);
+                                fetchedNews = $template.render(article);
+                                $('#news-list').prepend(fetchedNews);
                             }
                         });
                     });

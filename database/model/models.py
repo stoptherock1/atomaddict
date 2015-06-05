@@ -97,7 +97,8 @@ class Article(db.Model):
             'head': self.head,
             'url': self.url,
             'picture': self.picture or '',
-            'time': self.time.strftime('%Y-%m-%d %H:%M')
+            'time': self.time.strftime('%Y-%m-%d %H:%M'),
+            'tag': self.website.tag.name,
         }
 
     def __repr__(self):

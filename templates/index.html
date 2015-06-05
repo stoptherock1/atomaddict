@@ -71,7 +71,30 @@
 				</div>
 			{% endfor %}
 		{% endfor %}
-	</div>	
+	</div>
+
+{% raw %}
+<script id="newsTempl" type="text/x-jsrender">
+<div class="news" data-uk-filter={{:tag}} data-url="{{:url}}">
+    <div class="uk-panel uk-panel-box tile">
+        <div class="uk-panel-teaser">
+            {{if picture }}
+            <img src={{:picture}} alt="">
+            {{/if}}
+        </div>
+        <article class="uk-article">
+            <h2>{{:head}}</h2>
+            <div class="uk-article-meta uk-clearfix">
+                <a class="link-external" href={{:url}} target="blank">Read full article</a>
+                <time class="uk-float-right" datetime={{:time}}>{{:time}}</time>
+            </div>
+        </article>
+    </div>
+    <input type="hidden" name="article_id" value="{{:id}}">
+</div>
+</script>
+{% endraw %}
+
 {% endblock %}
 
 {% block modal %}
