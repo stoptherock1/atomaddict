@@ -22,7 +22,7 @@ $(function () {
                         fetchedNews;
 
                     $.each(data, function (tag, articles) {
-                        $.each(articles, function (i, article) {                            
+                        $.each(articles, function (i, article) {
                             if (presentArticles.indexOf(article.id) < 0) {
                                 fetchedNews = $template.render(article);
                                 $('#news-list').prepend(fetchedNews);
@@ -39,7 +39,7 @@ $(function () {
 			};
 		}());
     
-    api.fetchNews();
+    window.setInterval(api.fetchNews, 10000);
 
     function handleEmptyCategory() {
         var category = $('ul.tags li.uk-active').data('uk-filter'),
@@ -93,7 +93,7 @@ $(function () {
         */
     });
 
-    $('#mark-as-read').click(function (event) {
+    $('#mark-as-read, #mark-as-read-mobile').click(function (event) {
         $('.news').addClass('already-read');
 		api.markAllAsRead();
         handleEmptyCategory();

@@ -10,7 +10,7 @@
     </ul>
     <div class="uk-navbar-flip">
         <ul class="uk-navbar-nav uk-hidden-small">
-            <li><a href="#modal-settings" title="Settings" data-uk-modal><i class="uk-icon-cog"></i></a></li>
+<!--            <li><a href="#modal-settings" title="Settings" data-uk-modal><i class="uk-icon-cog"></i></a></li>-->
             <li><a href="{{ url_for('sign_out') }}" title="Sign out"><i class="uk-icon-sign-in"></i></a></li>
         </ul>
     </div>
@@ -34,9 +34,9 @@
 	        <ul class="uk-nav uk-nav-offcanvas">
 	            <li><a href="#modal-subscribe" title="Subscribe" data-uk-modal><i class="uk-icon-rss"></i> Subscribe</a></li>
 	            <li><a href="#" title="Refresh feeds"><i class="uk-icon-refresh"></i> Refresh feeds</a></li>
-	            <li><a href="#" title="Mark as read"><i class="uk-icon-check-square-o"> Mark as read</i></a></li>
+	            <li><a href="#" title="Mark as read" id="mark-as-read-mobile"><i class="uk-icon-check-square-o"> Mark as read</i></a></li>
 	            <li class="uk-nav-divider"></li>
-	            <li><a href="#modal-settings" title="Settings" data-uk-modal><i class="uk-icon-cog"></i> Settings</a></li>
+<!--	            <li><a href="#modal-settings" title="Settings" data-uk-modal><i class="uk-icon-cog"></i> Settings</a></li>-->
 	            <li><a href="{{ url_for('sign_out') }}" title="Sign out"><i class="uk-icon-sign-in"></i> Sign out</a></li>
 	        </ul>
 	    </nav>
@@ -98,6 +98,7 @@
 {% endblock %}
 
 {% block modal %}
+<!--
     <section id="modal-settings" class="uk-modal">
         <div class="uk-modal-dialog">
             <div class="uk-modal-header"><h2>Settings</h2></div>
@@ -137,10 +138,11 @@
            
             <div class="uk-modal-footer uk-text-right">
                 <button type="button" class="uk-button uk-modal-close">Cancel</button>
-                <button type="button" class="uk-button uk-modal-close uk-button-primary" value="asf">Save</button>
+                <button type="button" class="uk-button uk-modal-close uk-button-primary">Save</button>
             </div>
         </div>
     </section>
+-->
 
     <section id="modal-subscribe" class="uk-modal">
         <div class="uk-modal-dialog">
