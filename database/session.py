@@ -475,11 +475,8 @@ def add_articles_to_user_after_checking_tag(user, tag):
             if web.articles:
                 articles = web.articles
                 nr_of_added_articles = 0
-                for article in articles:
+                for article in articles[:10]:
                     user.articles.append(article)
-                    nr_of_added_articles += 1
-                    if nr_of_added_articles > 10:
-                        break
 
 
 def get_user_unreaded_articles_as_dict(email, tagname=None):

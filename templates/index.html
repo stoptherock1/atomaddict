@@ -10,7 +10,7 @@
     </ul>
     <div class="uk-navbar-flip">
         <ul class="uk-navbar-nav uk-hidden-small">
-            <li><a href="#modal-settings" title="Settings" data-uk-modal><i class="uk-icon-cog"></i></a></li>
+<!--            <li><a href="#modal-settings" title="Settings" data-uk-modal><i class="uk-icon-cog"></i></a></li>-->
             <li><a href="{{ url_for('sign_out') }}" title="Sign out"><i class="uk-icon-sign-in"></i></a></li>
         </ul>
     </div>
@@ -34,9 +34,9 @@
 	        <ul class="uk-nav uk-nav-offcanvas">
 	            <li><a href="#modal-subscribe" title="Subscribe" data-uk-modal><i class="uk-icon-rss"></i> Subscribe</a></li>
 	            <li><a href="#" title="Refresh feeds"><i class="uk-icon-refresh"></i> Refresh feeds</a></li>
-	            <li><a href="#" title="Mark as read"><i class="uk-icon-check-square-o"> Mark as read</i></a></li>
+	            <li><a href="#" title="Mark as read" id="mark-as-read-mobile"><i class="uk-icon-check-square-o"> Mark as read</i></a></li>
 	            <li class="uk-nav-divider"></li>
-	            <li><a href="#modal-settings" title="Settings" data-uk-modal><i class="uk-icon-cog"></i> Settings</a></li>
+<!--	            <li><a href="#modal-settings" title="Settings" data-uk-modal><i class="uk-icon-cog"></i> Settings</a></li>-->
 	            <li><a href="{{ url_for('sign_out') }}" title="Sign out"><i class="uk-icon-sign-in"></i> Sign out</a></li>
 	        </ul>
 	    </nav>
@@ -50,35 +50,55 @@
         <div id="no-news" class="uk-panel uk-panel-box uk-panel-box-secondary uk-width-medium-1-4 uk-container-center uk-text-center uk-hidden">
             <p>Current category has no unread items</p>
         </div>
-		{% for tag in tags_and_articles.keys() %}
-			{% for article in tags_and_articles[tag] %}	
+		{% for tag, articles in tags_and_articles.iteritems() %}
+			{% for article in articles %}	
         		<div class="news" data-uk-filter={{tag}} data-url="{{article.url}}">
-        			<form id="mark-article" method="POST" action="{{ url_for('article_readed') }}">
-						<div class="uk-panel uk-panel-box tile">
-							<div class="uk-panel-teaser">
-								{% if article.picture%}
-								<img src={{article.picture}} alt="">
-								{% endif %}
-							</div>
-							<article class="uk-article">
-								<h2>{{article.head}}</h2>
-								<div class="uk-article-meta uk-clearfix">
-		                            <a class="link-external" href={{article.url}} target="blank">Read full article</a>
-	                            	<time class="uk-float-right" datetime={{article.time.strftime('%Y-%m-%d %H:%M')}}>{{article.time.strftime('%d %b, %H:%M')}}</time>
-								</div>
-	                        	<!--p>TODO: Some lead</p-->
-							</article>
-						</div>
-						<input type="text" name="article_id" value="{{article.id}}" hidden="True">
-					</form>
+                    <div class="uk-panel uk-panel-box tile">
+                        <div class="uk-panel-teaser">
+                            {% if article.picture%}
+                            <img src={{article.picture}} alt="">
+                            {% endif %}
+                        </div>
+                        <article class="uk-article">
+                            <h2>{{article.head}}</h2>
+                            <div class="uk-article-meta uk-clearfix">
+                                <a class="link-external" href={{article.url}} target="blank">Read full article</a>
+                                <time class="uk-float-right" datetime={{article.time.strftime('%Y-%m-%d %H:%M')}}>{{article.time.strftime('%d %b, %H:%M')}}</time>
+                            </div>
+                        </article>
+                    </div>
+                    <input type="hidden" name="article_id" value="{{article.id}}">
 				</div>
-			
 			{% endfor %}
 		{% endfor %}
-	</div>	
+	</div>
+
+{% raw %}
+<script id="newsTempl" type="text/x-jsrender">
+<div class="news" data-uk-filter={{:tag}} data-url="{{:url}}">
+    <div class="uk-panel uk-panel-box tile">
+        <div class="uk-panel-teaser">
+            {{if picture }}
+            <img src={{:picture}} alt="">
+            {{/if}}
+        </div>
+        <article class="uk-article">
+            <h2>{{:head}}</h2>
+            <div class="uk-article-meta uk-clearfix">
+                <a class="link-external" href={{:url}} target="blank">Read full article</a>
+                <time class="uk-float-right" datetime={{:time}}>{{:time}}</time>
+            </div>
+        </article>
+    </div>
+    <input type="hidden" name="article_id" value="{{:id}}">
+</div>
+</script>
+{% endraw %}
+
 {% endblock %}
 
 {% block modal %}
+<!--
     <section id="modal-settings" class="uk-modal">
         <div class="uk-modal-dialog">
             <div class="uk-modal-header"><h2>Settings</h2></div>
@@ -118,10 +138,11 @@
            
             <div class="uk-modal-footer uk-text-right">
                 <button type="button" class="uk-button uk-modal-close">Cancel</button>
-                <button type="button" class="uk-button uk-modal-close uk-button-primary" value="asf">Save</button>
+                <button type="button" class="uk-button uk-modal-close uk-button-primary">Save</button>
             </div>
         </div>
     </section>
+-->
 
     <section id="modal-subscribe" class="uk-modal">
         <div class="uk-modal-dialog">
@@ -134,9 +155,8 @@
 			        		<div><p>{{ tag }}<input type="checkbox", name="{{ tag }}" value="True"></p></div>
 			        	{% endif %}
 			        {% endfor %}
-			        <input type="submit">
 		            <div class="uk-modal-footer uk-text-right">
-		                <button class="uk-button uk-modal-close uk-button-primary">Save</button>
+		                <button name="submit" class="uk-button uk-modal-close uk-button-primary">Save</button>
 		            </div>
 	            </form>
    

@@ -20,6 +20,23 @@ ul.tags {
 }
 
 .news {
-    max-width: 400px;
-    min-width: 250px;
+    width: 315px;
+}
+
+.news img {
+    margin: 15px 15px 0;
+}
+
+
+
+.news.already-read h2 {
+    color: lightgray;
+}
+
+.news.already-read .uk-panel-box {
+    background-color: transparent;
+}
+
+.news.already-read .link-external {
+    color: lightblue;
 }
