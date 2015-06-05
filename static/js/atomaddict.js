@@ -100,7 +100,9 @@ $(function () {
     });
     
     $('#modal-subscribe').delegate('button', 'click', function (event) {
-        $.post('/save_tags', $('#modal-subscribe form').serialize());
+        $.post('/save_tags', $('#modal-subscribe form').serialize(), function () {
+        	window.location.reload();
+        });
     });
 
     updateCategory();
