@@ -1,0 +1,21 @@
+\BOOKMARK [1][-]{section.1}{Introduction}{}% 1
+\BOOKMARK [1][-]{section.2}{Project goals}{}% 2
+\BOOKMARK [1][-]{section.3}{User requirements}{}% 3
+\BOOKMARK [1][-]{section.4}{Project management}{}% 4
+\BOOKMARK [2][-]{subsection.4.1}{GitHub}{section.4}% 5
+\BOOKMARK [2][-]{subsection.4.2}{Trello}{section.4}% 6
+\BOOKMARK [2][-]{subsection.4.3}{Gantt diagram}{section.4}% 7
+\BOOKMARK [2][-]{subsection.4.4}{Work breakdown structure}{section.4}% 8
+\BOOKMARK [1][-]{section.5}{System diagram}{}% 9
+\BOOKMARK [1][-]{section.6}{Use cases}{}% 10
+\BOOKMARK [2][-]{subsection.6.1}{Usecase: Validate user}{section.6}% 11
+\BOOKMARK [1][-]{section.7}{Technologies used in project}{}% 12
+\BOOKMARK [2][-]{subsection.7.1}{Celery}{section.7}% 13
+\BOOKMARK [2][-]{subsection.7.2}{RabbitMQ}{section.7}% 14
+\BOOKMARK [2][-]{subsection.7.3}{Database}{section.7}% 15
+\BOOKMARK [3][-]{subsubsection.7.3.1}{Table Overview}{subsection.7.3}% 16
+\BOOKMARK [3][-]{subsubsection.7.3.2}{Table Details}{subsection.7.3}% 17
+\BOOKMARK [3][-]{subsubsection.7.3.3}{Implementation}{subsection.7.3}% 18
+\BOOKMARK [2][-]{subsection.7.4}{Front-end}{section.7}% 19
+\BOOKMARK [1][-]{section.8}{Code documentation}{}% 20
+\BOOKMARK [2][-]{subsection.8.1}{Database package}{section.8}% 21
