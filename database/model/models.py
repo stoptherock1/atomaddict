@@ -8,11 +8,11 @@ users_tags = Table('users_tags', db.metadata,
                    Column('user_id', Integer, ForeignKey('users.id')),
                    Column('tag_id', Integer, ForeignKey('tags.id')))
 
-users_unreaded_articles = Table('users_unreaded_articles', db.metadata,
-                                Column('user_id', Integer,
-                                       ForeignKey('users.id')),
-                                Column('article_id', Integer,
-                                       ForeignKey('articles.id')))
+users_unread_articles = Table('users_unread_articles', db.metadata,
+                              Column('user_id', Integer,
+                                     ForeignKey('users.id')),
+                              Column('article_id', Integer,
+                                     ForeignKey('articles.id')))
 
 
 class User(db.Model):
@@ -27,14 +27,26 @@ class User(db.Model):
                         backref='users',
                         lazy='dynamic')
 
-    # Many to many Users <-> unviewed articles
-    articles = relationship('Article', secondary=users_unreaded_articles,
+    # Many to many Users <-> unread articles
+    articles = relationship('Article', secondary=users_unread_articles,
                             backref='users',
                             lazy='dynamic')
+
+    # One to one <-> user settings
+    settings = relationship('Settings', uselist=False, backref='user',
+                            cascade="save-update, merge, delete")
 
     def __repr__(self):
         return "<User (email = '%s', nickname = '%s', password = '%s')>" % \
             (self.email, self.nickname, self.password)
+
+
+class Settings(db.Model):
+    __tablename__ = 'settings'
+    id = Column(Integer, primary_key=True)
+    language = Column(String(15))
+    tiles_size = Column(String(10))
+    user_id = Column(Integer, ForeignKey('users.id'))
 
 
 class Tag(db.Model):
@@ -79,7 +91,16 @@ class Article(db.Model):
     # Many to One: articles -> website
     website_id = Column(Integer, ForeignKey('websites.id'))
 
+    def jsonify(self):
+        return {
+            'id': self.id,
+            'head': self.head,
+            'url': self.url,
+            'picture': self.picture or '',
+            'time': self.time.strftime('%Y-%m-%d %H:%M'),
+            'tag': self.website.tag.name,
+        }
+
     def __repr__(self):
         return "<Article (head = '%s', url = '%s', date = '%s')>" % \
             (self.head, self.url, self.time)
-

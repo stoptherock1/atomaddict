@@ -1,0 +1,130 @@
+.container-bg-image {
+	background: url('../pictures/dark-green-bg.png') repeat top left;
+	position: fixed;
+	height: 100%;
+	width: 100%;
+}
+
+.container {
+	position: fixed;
+	display: block;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	background: rgba(0, 0, 0, 0.8);
+	/* opacity: 1; */
+	margin-top: 40px;
+}
+
+.container-box {
+	display: fblock;
+	-moz-box-sizing: border-box;
+  	box-sizing: border-box;
+  	margin: 50px auto;
+ 	padding: 20px;
+ 	width: 600px;
+ 	max-width: 100%;
+ 	max-width: calc(100% - 20px);
+ 	background: #ffffff;
+ 	opacity: 1;
+}
+
+.container-box-sign-in {
+	position: relative;
+}
+
+.container-box-sign-up{
+	position: relative;
+	top: -327px;
+	left: 100%;
+}
+
+
+.container-box h1 {
+	font-size: 3em;
+	text-align: center;
+	letter-spacing: -2px;
+}
+
+/* Message flashing */
+.flash {
+	background-color: #FBB0B0;
+	padding: 10px;
+	width: 400px;
+}
+
+/* form */
+
+form label {
+	position: realtive;
+	font-size: 1.2em;
+	font-weight: bold;
+	display: block;
+	padding: 10px 0;	
+}
+
+
+/* Sign-up form */
+
+form input#email,
+form input#nickname,
+form input#password {
+	/* width: 400px; */
+	position: relative;
+	background-color: #fafafa;
+	-webkit-border-radius: 3px;
+		-moz-border-radius: 3px;
+		border-radius: 3px;
+	border: 1px solid #cccccc;
+	padding: 5px;
+	font-size: 1.1 em;
+}
+
+form input#submit,
+.btn-sign-up,
+.btn-sign-in {
+	display: block;
+	-webkit-border-radius: 3px;
+		-moz-border-radius: 3px;
+			border-radius: 3px;
+	border: 1px solid #d8d8d8;
+	padding: 10px;
+	font-weight: bold;
+	text-align: center;
+	color: #000000;
+	background-color: #f4f4f4;
+	background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #f4f4f4), color-stop(100%, #e5e5e5));
+  	background-image: -webkit-linear-gradient(top, #f4f4f4, #e5e5e5);
+  	background-image: -moz-linear-gradient(top, #f4f4f4, #e5e5e5);
+  	background-image: -ms-linear-gradient(top, #f4f4f4, #e5e5e5);
+  	background-image: -o-linear-gradient(top, #f4f4f4, #e5e5e5);
+  	background-image: linear-gradient(top, #f4f4f4, #e5e5e5);filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr=#f4f4f4, endColorstr=#e5e5e5);
+}
+
+form input#submit:hover, 
+.btn-sign-up:hover,
+.btn-sign-in:hover{
+	cursor: pointer;
+	border:1px solid #c1c1c1; 
+	background-color: #dbdbdb;
+	background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#dbdbdb), color-stop(100%, #cccccc));
+	background-image: -webkit-linear-gradient(top, #dbdbdb, #cccccc);
+	background-image: -moz-linear-gradient(top, #dbdbdb, #cccccc);
+	background-image: -ms-linear-gradient(top, #dbdbdb, #cccccc);
+	background-image: -o-linear-gradient(top, #dbdbdb, #cccccc);
+ 	background-image: linear-gradient(top, #dbdbdb, #cccccc);filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr=#dbdbdb, endColorstr=#cccccc);
+          
+}
+
+form input#password {
+	margin-bottom: 10px;
+}
+
+/* button to sign up/sign in */
+.btn-sign-up,
+.btn-sign-in
+{
+	float: right;
+	margin-top: -40px;
+}
