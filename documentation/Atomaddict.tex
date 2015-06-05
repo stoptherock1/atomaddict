@@ -19,6 +19,9 @@
 \usepackage{indentfirst}
 \usepackage{graphicx}
 \usepackage{float}
+\usepackage[table]{xcolor}
+\usepackage{dcolumn,multirow,longtable}
+\usepackage{amssymb}
 
 \newcommand{\lcolumn}{0.3\textwidth}
 \newcommand{\rcolumn}{0.6\textwidth}
@@ -27,11 +30,12 @@
 \newcolumntype{C}[1]{>{\centering\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
 \newcolumntype{R}[1]{>{\raggedleft\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
 
-
-
 \begin{document}
 \maketitle
 
+\thispagestyle{empty}
+\clearpage
+\setcounter{page}{1}
 
 %**************************************************************************************************
 %                                              SECTION
@@ -50,45 +54,88 @@ The main goal of the \textbf{Atomaddict} project was to create a narrow-purpose 
 %**************************************************************************************************
 %                                              SECTION
 %**************************************************************************************************
-\section{Project goals}\label{project goals}
+\section{Business justification}
+
+There are already exist applications dedicated to subscribe information from websites. However they are complicated in use, have unpleasant look or have put on limitations. Our goal is to make an application which has not any of those disadvantages. Application which is simple to use and have pleasant look. Which will attract user's attention from the first use.
+
+%*************************************************************************
+%											SECTION
+%************************************************************
+
+\section{Project scope}
+
+\subsection{Project goals}\label{project goals}
 The aim of the project is to create a web application, which aggregates syndicated web content, such as online newspapers, blogs or podcasts. User will receive information and news based on his own preferences, that is, he will be able to choose topics or particular websites and subscribe to the groups of RSS and Atom feeds. 
 The second goal was creating a tool, which will be easy to use regardless of target platform or users skill in IT applications. \textbf{Atomaddict} has simple intuitive interface and customizable functionality, which is supposed to satisfy any user expectations.
 The application is useful either for new and for hard users. We have achieved it by creating two kinds of views –- simple title look-like view and more advanced table view. The principles of the User Interface are nice flexible design, which will look fine on any sort of display, and extremely narrowed functionality, which will allow user to be focused on main application features and not be bothered by useless buttons and clumsy bars.
 
-%**************************************************************************************************
-%                                              SECTION
-%**************************************************************************************************
-\section{User requirements}\label{user requirements}
+%--------------------------------subsection--------------------
+
+\subsection{Project's risk}
+
+Source of risk can come from scope, schedule, stakeholder and their expectations and implementation challenges. Due to the fact that we our new in web technologies, most of the events that may have negative impact on the project’s ability to achieve goals, may come from the inexperienced team members. The other important fact is that we have short period of time, it is 3 months, to complete the project. Every change to the schedule may results in crossing the deadline.
+
+%--------------------------------subsection-----------------------
+
+\subsection{Features to be implemented}
 
 \begin{itemize}
+	\item Primary features
+	\begin{itemize}
+		\item user should be able to sign in, sign out and sign up
+		\item Each user should be able to choose his tags to subscribe
+		\item user should be able to view feed as a tiles-view
+		\item feeds should be shown depending on the category, that user have selected
+		\item user should be able to mark page as read
+		\item each feed should have title, publication date and link to the original page
+		\item after clicking on the feed user should be redirected to the original page
+		\item user should be able to refresh feeds
+		\item all interface elements should adapt (rearrange) to the display size
+	\end{itemize}
 
-    \item user should be able to sign in, sign out and sign up
-
-    \item user should be able to view feeds as a table of articles; 
-
-    \item feeds should be shown depending on the category, that user have selected
-
-    \item each element of table should have title, publication date and link to the original page
-
-    \item after clicking on the element of table user should be redirected to the original page
-
-    \item user should be able to refresh feeds
-
-    \item user should be able to mark page as read
-
-    \item in `\emph{Options}' section user should be able to choose language of the page between English and Polish
-
-    \item in `\emph{Options}' section user should be able to change font size (possible sizes:  Small, Regular, Big, Mixed)
-
-    \item All interface elements should adapt (rearrange) to the display size
-
+	\item Secondary features
+	\begin{itemize}
+			\item user should be able to view feeds as a table of articles
+			\item in `\emph{Options}' section user should be able to choose language of the page between English and Polish
+			\item in `\emph{Options}' section user should be able to change font size (possible sizes:  Small, Regular, Big, Mixed)
+			\item user should be able to define his own tags and assign websites to them
+			\item user should be able to navigate website with keystrokes
+	\end{itemize}
 \end{itemize}
 
 %**************************************************************************************************
 %                                              SECTION
 %**************************************************************************************************
+
+\section{Short state of art}
+
+Often e-mail programs and web browsers have the ability to display RSS feeds. They are called RSS feed aggregators. Below are listed the most popular ones.~\cite{wiki:stateofart}
+
+\begin{itemize}
+	\item \textbf{Feedly}
+	It is available for iOS and Android and for most major browsers (Chrome, Firefox, Safari). It is completely free.
+	
+	\item \textbf{Google News/Reader}
+	It is probabily the most popular news aggregation service on the Web.
+	
+	\item \textbf{Fark} has long survived as one of the web's most popular sites, and one of the web's most trusted sources for a wide variety of important, interesting, and thoughtful topics.
+	
+	\item \textbf{Pulse}
+	Available for iOS (both iPhone and iPad) and Android.
+	
+	\item \textbf{News 360} is available as a webapp and for almost every mobile platform, including iOS (iPhone and iPad,) Android, Windows Phone 7, and the BlackBerry Playbook.
+	
+	
+\end{itemize}
+
+
+
+
+%**************************************************************************************************
+%												SECTION
+%**************************************************************************************************
 \section{Project management}\label{project management}
-To make work on the \textbf{Atomaddict} project efficient and multitask we used we took an advice from the project coordinator and used several additional tools as GitHub (\url{https://github.com}) and Trello (\url{https://trello.com}). Also Gantt diagram was used to plan the workflow.
+To make work on the \textbf{Atomaddict} project efficient and multitask we took an advice from the project coordinator and used several additional tools as GitHub (\url{https://github.com}) and Trello (\url{https://trello.com}). Also Gantt diagram was used to plan the workflow.
 
 
 %--------------------------------------------SUBSECTION--------------------------------------------
@@ -150,6 +197,48 @@ Trello has a variety of work and personal uses including real estate management,
 
 
 %--------------------------------------------SUBSECTION--------------------------------------------
+\subsection{Milestones}
+\begin{itemize}
+
+    \item First sprint: 
+
+        \begin{itemize}
+
+            \item user experience research
+
+            \item back-end + light version front-end
+
+        \end{itemize}
+
+    \item Second sprint:
+
+        \begin{itemize}
+
+            \item minor improvements in back-end
+
+            \item advanced improvements in front-end and usability 
+
+            \item code review
+
+        \end{itemize}
+
+    \item Third sprint:
+
+        \begin{itemize}
+
+            \item final improvements and corrections
+
+            \item work on the documentation
+            
+            \item project final release
+
+        \end{itemize}
+      
+\end{itemize}
+
+
+
+%--------------------------------------------SUBSECTION--------------------------------------------
 \subsection{Gantt diagram}
 
 \begin{figure}[H]
@@ -168,6 +257,40 @@ Trello has a variety of work and personal uses including real estate management,
     \caption{\textbf{Atomaddict} project work breakdown structure}
 \end{figure}
 
+
+%--------------------------------------------SUBSECTION--------------------------------------------
+\section{Costs estimation}
+
+\begin{table}[H]
+\centering
+    \begin{tabular}{p{5cm}p{9cm}}  \hline
+    \rowcolor{blue!20!black!30!yellow}\multicolumn{2}{|c|}{\textbf{Time \& Effort}} \\ \hline \hline
+
+    Contact hours               & 90 h   \\ \hline
+    Work hours                  & 180 h  \\ \hline
+    Whole work one the project  & 270 h \\ \hline
+
+    \end{tabular}
+    \caption{Time \& Effort}
+\end{table}
+
+
+\begin{table}[H]
+\centering
+    \begin{tabular}{p{5cm}p{9cm}}  \hline
+    \rowcolor{blue!20!black!30!cyan}\multicolumn{2}{|c|}{\textbf{Project cost \& Benefits}} \\ \hline \hline
+    
+    Developers salary               & 180 x 80 = 14,400 zl    \\ \hline
+    Social \& Health issues         & 2,828 zl      \\ \hline
+    Total direct costs              & 17228 zl    \\ \hline
+    Indirect costs (20\%)           & 3445 zl    \\ \hline
+    Total costs                     & 20673 zl    \\ \hline
+    Tax VAT (23\%)                  & 4755 zl    \\ \hline
+    Product cost              & 25428 zl    \\ \hline
+
+    \end{tabular}
+    \caption{Project cost \& Benefits}
+\end{table}
 
 
 %**************************************************************************************************
@@ -306,6 +429,9 @@ Implementation of \textbf{Atomaddict} project was done in Python, JavaScript, HT
 
 %--------------------------------------------SUBSECTION--------------------------------------------
 \subsection{Celery}
+
+\includegraphics[width=0.25\textwidth]{images/celery.png} \\
+
 Celery is an open source asynchronous task queue/job queue based on distributed message passing. It is focused on real-time operation, but supports scheduling as well.
 
 The execution units, called tasks, are executed concurrently on one or more worker nodes using multiprocessing, Eventlet or gevent. Tasks can execute asynchronously (in the background) or synchronously (wait until ready). Celery is used in production systems to process millions of tasks every hour.
@@ -315,6 +441,9 @@ The recommended message broker is RabbitMQ, but support for Redis, MongoDB, Bean
 
 %--------------------------------------------SUBSECTION--------------------------------------------
 \subsection{RabbitMQ}
+
+\includegraphics[width=0.4\textwidth]{images/rabbitmq2.png} \\
+
 RabbitMQ is open source message broker software (sometimes called message-oriented middleware) that implements the Advanced Message Queuing Protocol (AMQP). The RabbitMQ server is written in the Erlang programming language and is built on the Open Telecom Platform framework for clustering and failover. Client libraries to interface with the broker are available for all major programming languages.
 
 Rabbit Technologies Ltd., develops and provides support for RabbitMQ. Rabbit Technologies started as a joint venture between LShift and CohesiveFT in 2007, and was acquired in April 2010 by SpringSource, a division of VMware. The project became part of GoPivotal in May 2013.
@@ -344,7 +473,77 @@ The source code is released under the Mozilla Public License. The project consis
 %--------------------------------------------SUBSECTION--------------------------------------------
 \subsection{Database}
 
+\includegraphics{images/sqlite.png} \\
+
+To store necessary information for \textbf{Attomaddict} was used SQLite database. The figure \ref{fig:databaseModel} provides a visual overview of the AttomAddict database and the realtions beetwen the tables. Table \ref{tab:tablesOverwiew} and \ref{tab:tableDetails} include additional details on the tables and columns.
+
+\begin{figure}[H]
+	\includegraphics[width=\textwidth]{images/atomAddictDataBase.png}
+	\caption{Database model}
+	\label{fig:databaseModel}
+\end{figure}
+
+\subsubsection{Table Overview}
+
+\begin{table}[H]
+\centering
+	\begin{tabular}{p{5cm}p{9cm}}  \hline
+	\rowcolor{blue!20!black!30!green}\multicolumn{2}{|c|}{\textbf{AttomAddict Tables Overwiew}} \\ \hline \hline
+	User 	  & 		Basic users data						 		\\ \hline
+	Settings  & 		User configuration settings 				\\ \hline
+	Tag 	  &  		Tags representing available topics of interest for subscription	\\ \hline
+	Website   & 		Websites providing RSS data										 \\ \hline
+	Article	  & 		Articles parsed from websites 									\\ \hline
+
+	\end{tabular}
+	\caption{Tables overview}
+	\label{tab:tablesOverwiew}
+\end{table}
+
+\subsubsection{Table Details}
+
+\begin{table}[H]
+\centering
+	\begin{tabular}{|p{3cm}|p{3cm}||p{7cm}|} \hline
+		\rowcolor{red!20!yellow!30!orange} \multicolumn{3}{|c|}{\textbf{AttomAddict Table Details}} \\ \hline \hline
+		\multirow{5}{*}{\textbf{User}} 	 
+								&	email	 	& 		email used to log into application		 \\ \cline{2-3}
+								&	nickname	& 		optional user nickname						 \\ \cline{2-3}
+								&	password	& 		password used to log into application		\\	\cline{2-3}
+								& 	tags		&		tags assigned to particular user			\\ 	\cline{2-3}
+								&	articles	&		unread articles by user						\\ 	\hline
+		\multirow{2}{*}{\textbf{Settings}}
+								&	language	&		user's preferable language					\\	\cline{2-3}
+								&	tiles size	&		size of user's tiles						\\	\hline
+		\multirow{2}{*}{\textbf{Tag}}
+								&	name		&		unique tag name								\\ \cline{2-3}
+								&	users		&		users assigned to particular tag			\\ \hline
+		\multirow{2}{*}{\textbf{Website}}
+								&	url			&		unique url definig werbsite					\\	\cline{2-3}
+								&	name		&		short description of website				\\ 	\hline
+		\multirow{5}{*}{\textbf{Article}}
+								&	haed		&		Content of an article						\\	\cline{2-3}
+								&	url			&		address of an article						\\	\cline{2-3}
+								&	picture		&		url of picture if it is available			\\	\cline{2-3}
+								&	time		&		time of publication							\\	\cline{2-3}
+								&	users		&		users which didn't read this article from the website from the tag which they are subscribing 			\\ \hline
+
+	\end{tabular}
+	\caption{Table Details}
+	\label{tab:tableDetails}
+\end{table}
+
+
+\subsubsection{Implementation}
+
+\includegraphics{images/sqla.png}
+
+Database was made in python using SQLAlchemy. SQLAlchemy is the Python SQL toolkit and Object Relational Mapper that gives application developers the full power and flexibility of SQL. It provides a full suite of well known enterprise-level persistence patterns, designed for efficient and high-performing database access, adapted into a simple and Pythonic domain language.
+
+
 %--------------------------------------------SUBSECTION--------------------------------------------
+
+
 \subsection{Front-end}
 
 %**************************************************************************************************
@@ -361,18 +560,18 @@ Description: function checks all data sources (websites), associated with the gi
   \begin{tabular}{|L{\lcolumn}|L{\rcolumn}|}
     \hline
     
-    \textbf{Functions name}  & \textit{
+    \textbf{Functions name}  & \texttt{
         fetchDataByTag
         } \\ \hline
         
-    \textbf{Source file} & \textit{
+    \textbf{Source file} & \texttt{
         dataCollector.py
         } \\ \hline
         
     \textbf{Input parameters}  & 
         \begin{itemize}
             \vspace{-9mm} \setlength{\itemsep}{0pt} \setlength{\parskip}{0pt} \setlength{\parsep}{0pt}
-            \item {\textit{tagName} -- name of the chosen category}
+            \item {\texttt{tagName} -- name of the chosen category}
             \vspace{-\baselineskip}
         \end{itemize}
         \\ \hline
@@ -388,24 +587,24 @@ Description: function checks all data sources (websites), associated with the gi
 
 %--------------------------------------------SUBSECTION--------------------------------------------
 \subsection{downloadFeeds}
-Description: function actually is a Celery task. It receives the data source url, parses it and returns the `\emph{data}' object, filled with the parsing results.
+Description: function actually is a Celery task. It receives the data source url, parses it and returns the `\texttt{data}' object, filled with the parsing results.
 
 \begin{center}
   \begin{tabular}{|L{\lcolumn}|L{\rcolumn}|}
     \hline
     
-    \textbf{Functions name}  & \textit{
+    \textbf{Functions name}  & \texttt{
         downloadFeeds
         } \\ \hline
         
-    \textbf{Source file} & \textit{
+    \textbf{Source file} & \texttt{
         tasks.py
         } \\ \hline
         
     \textbf{Input parameters}  & 
         \begin{itemize}
             \vspace{-9mm} \setlength{\itemsep}{0pt} \setlength{\parskip}{0pt} \setlength{\parsep}{0pt}
-            \item {\textit{pageUrl} -- url of data source}
+            \item {\texttt{pageUrl} -- url of data source}
             \vspace{-\baselineskip}
         \end{itemize}
         \\ \hline
@@ -413,8 +612,8 @@ Description: function actually is a Celery task. It receives the data source url
     \textbf{Return value} &
         \begin{itemize}
             \vspace{-9mm} \setlength{\itemsep}{0pt} \setlength{\parskip}{0pt} \setlength{\parsep}{0pt}
-            \item \emph{pageUrl} -- url of data source
-            \item \emph{data} -- object filled with parsing results
+            \item \texttt{pageUrl} -- url of data source
+            \item \texttt{data} -- object filled with parsing results
             \vspace{-\baselineskip}
         \end{itemize}
         
@@ -422,7 +621,119 @@ Description: function actually is a Celery task. It receives the data source url
         
   \end{tabular}
 \end{center}
+
+%---------------------------------------subsection----------------------------------------------
+\subsection{Database package}
+
+Database package is used for management database. It consists of different modules.
+
+\begin{itemize}
+	\item \texttt{model.models.py}
+	\begin{itemize}
+		\item \textbf{description:} The data that is stored in the database is represented by a collection of classes. The ORM layer is doing translations required to map objects created from these classes into rows in the proper database table. The \texttt{\_\_init\_\_.py} file in package \texttt{model} connects database into flask application.
+		
+		\item \textbf{classes:} User, Settings, Tag, Website, Article.
+	\end{itemize}
+	
+	\item \texttt{db\_repository} package 
+	\begin{itemize}
+		\item \textbf{description:} Following versions of database model are stored in that file providing easy access to them.
+	\end{itemize}
+	
+	\item \texttt{db\_create.py}
+	\begin{itemize}
+		\item \textbf{description:} Module used to create database. Type and location of the database are stored in \texttt{config.py} in that package.
+	\end{itemize}
+	
+	\item \texttt{db\_migrate.py}
+	\begin{itemize}
+		\item \textbf{description:} Any changes to the database model can be incorporate into the database by executing this module. 
+	\end{itemize}
+	
+	\item \texttt{db\_upgrade.py}
+	\begin{itemize}
+		\item \textbf{description:} This script allows the database to be upgraded to the latest revision, by applying the migration script stored in the database repository.
+	\end{itemize}
+	
+	\item \texttt{db\_downgrade.py}
+	\begin{itemize}
+		\item \textbf{description:} This script allows the database to be downgraded one revision.
+	\end{itemize}
+	
+	\item \texttt{session.py}
+	\begin{itemize}
+		\item \textbf{description:} Changes to a database are done in the context of a session. It allows easy access to database resources, it is adding, deleting, or changing records.
+		\item \textbf{classes:} 
+		\begin{itemize}
+			\item \texttt{Put} - adding resources to the database
+			\item \texttt{Get} - getting resources from the database 
+			\item \texttt{Delete} - deleting resources from the database
+			\item \texttt{Add} - connecting relationships between tables - e.g. adding tag to user
+		\end{itemize}
+		\item \textbf{methods:} They provide methods for changing user's settings or list of tags. They allow to get tags, articles or settings as a dictionary for easy use in html files. \\
+		Example methods:
+		\begin{itemize}
+			\item \texttt{def get\_user\_settings\_as\_dictionary(user\_email)} \\
+			Method is used to get user settings in a dictionary form, it is \{'key' : 'value', ... \}. \\
+			\textbf{input parameters:} \texttt{user\_email} -- user's email, whose settings will be returned \\
+			\textbf{return value:} settings as a dictionary
+			
+			\item \texttt{set\_user\_tags(email, tags)} \\
+			Method add checked and remove unchecked tags in the website to the user. \\
+			\textbf{input parameters:} \texttt{email} -- user's email to whom tags will be added or removed. \\
+			\texttt{tags} -- list of checked tags
+			
+		\end{itemize}
+	\end{itemize}
+	
+\end{itemize}
+
+
 \vspace{0.5cm}
+
+
+%**************************************************************************************************
+%                                              SECTION
+%**************************************************************************************************
+\section{System deployment}
+
+Due to the fact, that the Atomaddict service implementation is based on popular and well known solutions, system installation and deployment is easy and relatively fast.
+Project code can be downloaded from our GitHub repository.
+To run the project the environment should be integrated to the target platform:
+
+\begin{itemize}
+
+    \item Python 2.7 interpreter
+
+    \item Flask framework
+
+    \item RabbitMQ message broker
+
+    \item Celery framework
+
+\end{itemize}
+
+
+Additional steps should be done before starting the project:
+
+\begin{enumerate}
+
+    \item Start the RabbitMQ message broker. The standard way is well described on the RabbitMQ project webpage (\url{https://www.rabbitmq.com/how.html}).
+
+    \item Start the Celery worker. This operation also is easy and does not require any additional skill. Well described manual also can be found on project's website (\url{http://celery.readthedocs.org/en/latest/getting-started/first-steps-with-celery.html}).
+
+\end{enumerate}
+
+
+
+
+%**************************************************************************************************
+%                                              SECTION
+%**************************************************************************************************
+\section{Conclusions}
+
+Most part of our development team was less experienced in technologies. Nevertheless, work on the Atomaddict project gave us a lot of new knowledge and was some kind of introduction to web industry.
+Despite the lack of specific skills the project workflow was not affected do much and main features were delivered at time.
 
 \newpage
 \tableofcontents
